@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F2F Efektyvumas · Balandis vs Gegužė 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --lrk:      #C0181C;
+  --lrk-dk:   #8B0000;
+  --m4:       #C0181C;
+  --m4-bg:    #FDF2F2;
+  --m4-brd:   #F0BBBB;
+  --m5:       #1A5276;
+  --m5-bg:    #EBF5FB;
+  --m5-brd:   #AED6F1;
+  --kns:      #C0181C;
+  --kns-bg:   #FDF2F2;
+  --vln:      #1A5276;
+  --vln-bg:   #EBF5FB;
+  --green:    #1E8449;
+  --grn-bg:   #EAFAF1;
+  --orange:   #C0392B;
+  --org-bg:   #FDEDEC;
+  --yellow:   #9A7D0A;
+  --yel-bg:   #FEF9EC;
+  --nuol:     #1A5276;
+  --nuol-bg:  #EBF5FB;
+  --nuol-brd: #AED6F1;
+  --vienk:    #6C3483;
+  --vienk-bg: #F5EEF8;
+  --vienk-brd:#D2B4DE;
+  --bg:       #F4F6F9;
+  --surface:  #FFFFFF;
+  --brd:      #DDE1E8;
+  --text:     #1A1E2E;
+  --muted:    #5A6275;
+  --lbl:      #7A8299;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Atkinson Hyperlegible',Arial,sans-serif;font-size:16px;line-height:1.55;padding:24px 20px 60px;max-width:1340px;margin:0 auto}
+
+/* HEADER */
+.hdr{background:linear-gradient(130deg,var(--lrk-dk),var(--lrk));border-radius:14px;padding:22px 28px;margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.hdr h1{font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.hdr p{color:rgba(255,255,255,.75);font-size:14px;margin-top:5px}
+.leg{display:flex;gap:20px;background:rgba(255,255,255,.15);border-radius:8px;padding:10px 16px;align-items:center}
+.leg-i{display:flex;align-items:center;gap:8px;color:#fff;font-size:14px;font-weight:700}
+.leg-d{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--brd);border-radius:12px;padding:4px;margin-bottom:20px;width:fit-content}
+.tab{padding:8px 20px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.2s}
+.tab.active.nuol-tab{background:var(--nuol-bg);color:var(--nuol);border:1px solid var(--nuol-brd)}
+.tab.active.vienk-tab{background:var(--vienk-bg);color:var(--vienk);border:1px solid var(--vienk-brd)}
+.tab:not(.active):hover{background:var(--bg)}
+
+/* PANELS */
+.panel{display:none}.panel.active{display:block}
+
+/* SECTION */
+.sec{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lbl);margin:26px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brd)}
+.sec.ns{border-bottom-color:var(--nuol);color:var(--nuol)}
+.sec.vs{border-bottom-color:var(--vienk);color:var(--vienk)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--brd);border-radius:12px;padding:16px 18px}
+.kpi.nk{border-top:3px solid var(--nuol)}.kpi.vk{border-top:3px solid var(--vienk)}
+.kpi-lbl{font-size:12px;font-weight:700;color:var(--lbl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.kpi-pair{display:flex;gap:10px;margin-bottom:10px}
+.kpi-box{flex:1;border-radius:8px;padding:8px 8px}
+.kpi-box.m4{background:var(--m4-bg);border:1px solid var(--m4-brd)}
+.kpi-box.m5{background:var(--m5-bg);border:1px solid var(--m5-brd)}
+.kpi-mo{font-size:11px;font-weight:700;letter-spacing:1px}
+.kpi-mo.m4{color:var(--m4)}.kpi-mo.m5{color:var(--m5)}
+.kpi-n{font-size:22px;font-weight:700;line-height:1.1;white-space:nowrap}
+.kpi-n.m4{color:var(--m4)}.kpi-n.m5{color:var(--m5)}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.delta{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:13px;font-weight:700}
+.delta.up{background:var(--grn-bg);color:var(--green)}
+.delta.dn{background:var(--org-bg);color:var(--orange)}
+.delta.nu{background:#F0F3F7;color:var(--muted)}
+
+/* CITY GRID */
+.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.city-card{background:var(--surface);border:1px solid var(--brd);border-radius:12px;overflow:hidden}
+.city-card.nk{border-top:3px solid var(--nuol)}.city-card.vk{border-top:3px solid var(--vienk)}
+.city-stack{display:flex;flex-direction:column;gap:14px}
+.city-kpi-6{display:grid;grid-template-columns:repeat(6,1fr)}
+.city-head{padding:12px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;background:#FAFBFC}
+.city-kpi{display:grid;grid-template-columns:repeat(4,1fr)}
+.ck{padding:12px 14px;border-right:1px solid var(--brd)}.ck:last-child{border-right:none}
+.ck-lbl{font-size:11px;font-weight:700;color:var(--lbl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.ck-pair{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+.ck-v4{font-size:20px;font-weight:700;color:var(--m4)}
+.ck-v5{font-size:20px;font-weight:700;color:var(--m5)}
+.ck-sep{color:var(--lbl);font-size:14px}
+.ck-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* DONUTS */
+.donut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.donut-card{background:var(--surface);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center}
+.donut-title{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text)}
+.donut-wrap{position:relative;width:160px;height:160px;margin:0 auto}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;line-height:1.2}
+.donut-center-val{font-size:15px;font-weight:700}
+.donut-center-lbl{font-size:10px;color:var(--muted)}
+.donut-legend{margin-top:12px;display:flex;flex-direction:column;gap:5px}
+.donut-leg-item{display:flex;align-items:center;justify-content:space-between;font-size:13px;gap:8px}
+.donut-leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* CITY FILTER */
+.city-filter{display:flex;gap:6px;margin-bottom:12px}
+.cf-btn{padding:6px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--brd);background:var(--surface);color:var(--muted);transition:.2s}
+.cf-btn:hover{background:var(--bg)}
+.cf-btn.active-all{background:var(--bg);color:var(--text);border-color:var(--text)}
+.cf-btn.active-kns{background:var(--kns-bg);color:var(--kns);border-color:var(--kns)}
+.cf-btn.active-vln{background:var(--vln-bg);color:var(--vln);border-color:var(--vln)}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--brd);border-radius:12px;overflow:hidden}
+.card.nk{border-top:3px solid var(--nuol)}.card.vk{border-top:3px solid var(--vienk)}
+.card-head{padding:12px 18px;border-bottom:1px solid var(--brd);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:space-between;background:#FAFBFC;flex-wrap:wrap;gap:8px}
+.card-note{font-size:12px;color:var(--muted);padding:8px 18px;border-top:1px solid var(--brd);background:#FAFBFC;font-style:italic}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{font-size:12px;font-weight:700;color:var(--lbl);text-transform:uppercase;letter-spacing:.8px;padding:9px 12px;text-align:left;background:#F5F6F8;border-bottom:1px solid var(--brd);white-space:nowrap}
+thead th.r{text-align:right}
+thead th.m4h{color:var(--m4)} thead th.m5h{color:var(--m5)}
+tbody tr{border-bottom:1px solid #EAECF0}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#F7F8FA}
+tbody tr.hidden{display:none}
+td{padding:8px 12px;font-size:14px;vertical-align:middle}
+td.name{font-weight:700}
+td.r{text-align:right} td.m4v{text-align:right;color:var(--m4);font-weight:700}
+td.m5v{text-align:right;color:var(--m5);font-weight:700}
+td.gv{text-align:right;color:var(--green);font-weight:700}
+td.ov{text-align:right;color:var(--orange);font-weight:700}
+td.mv{text-align:right;color:var(--muted)}
+td.sep{text-align:center;color:#DDE1E8;padding:0 4px;width:8px}
+
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:700;margin-left:4px;vertical-align:middle}
+.badge.new{background:var(--grn-bg);color:var(--green)}
+.badge.out{background:var(--org-bg);color:var(--orange)}
+.badge.kns{background:var(--kns-bg);color:var(--kns)}
+.badge.vln{background:var(--vln-bg);color:var(--vln)}
+
+.eff{display:inline-block;padding:3px 8px;border-radius:10px;font-size:13px;font-weight:700}
+.eff.hi{background:var(--grn-bg);color:var(--green)}
+.eff.md{background:var(--yel-bg);color:var(--yellow)}
+.eff.lo{background:var(--org-bg);color:var(--orange)}
+
+.divider{height:2px;background:linear-gradient(90deg,var(--vienk),var(--vienk-brd));border-radius:2px;margin:36px 0 0}
+
+/* SUMMARY */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.sum-box{background:var(--surface);border:1px solid var(--brd);border-radius:12px;padding:16px 18px}
+.sum-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.sum-item{font-size:14px;padding:5px 0;border-bottom:1px solid var(--bg);display:flex;gap:8px;align-items:baseline}
+.sum-item:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>✚ F2F Facer'ių efektyvumas · Balandis vs Gegužė 2026</h1>
+    <p>Nuolatinės ir vienkartinės sutartys · Įmokos EUR · Darbo valandos · €/val · sut./val</p>
+  </div>
+  <div class="leg">
+    <div class="leg-i"><div class="leg-d" style="background:#F0BBBB"></div>Balandis 2026</div>
+    <div class="leg-i"><div class="leg-d" style="background:#AED6F1"></div>Gegužė 2026</div>
+  </div>
+</div>
+
+<!-- MAIN TABS -->
+<div class="tabs">
+  <button class="tab nuol-tab active" onclick="switchTab('nuol')">📋 Nuolatinės sutartys</button>
+  <button class="tab vienk-tab" onclick="switchTab('vienk')">💜 Vienkartinės įmokos</button>
+  <button class="tab" id="tab-imokos" onclick="switchTab('imokos')" style="color:var(--muted)">📊 Įmokų analizė 01–05</button>
+</div>
+
+<!-- ══════════ NUOLATINĖS PANEL ══════════ -->
+<div id="panel-nuol" class="panel active">
+
+<div class="sec ns">Bendri KPI · Nuolatinės</div>
+<div class="kpi-grid">
+  <div class="kpi nk">
+    <div class="kpi-lbl">Sutartys</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">127</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">250</div></div>
+    </div>
+    <span class="delta up">↑ +123 (+97%)</span>
+  </div>
+  <div class="kpi nk">
+    <div class="kpi-lbl">Įmokų suma</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">1 167</div><div class="kpi-sub">EUR</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">2 360</div><div class="kpi-sub">EUR</div></div>
+    </div>
+    <span class="delta up">↑ +1 193€ (+102%)</span>
+  </div>
+  <div class="kpi nk">
+    <div class="kpi-lbl">Darbo valandos</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">558,0</div><div class="kpi-sub">val.</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">987,8</div><div class="kpi-sub">val.</div></div>
+    </div>
+    <span class="delta up">↑ +429.8 val.</span>
+  </div>
+  <div class="kpi nk">
+    <div class="kpi-lbl">€ / darbo val.</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">2,09</div><div class="kpi-sub">€/val</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">2,39</div><div class="kpi-sub">€/val</div></div>
+    </div>
+    <span class="delta up">↑ +0.3 €/val</span>
+  </div>
+  <div class="kpi nk">
+    <div class="kpi-lbl">Sut. / darbo val.</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">0,228</div><div class="kpi-sub">sut./val</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">0,253</div><div class="kpi-sub">sut./val</div></div>
+    </div>
+    <span class="delta up">↑ +0.025</span>
+  </div>
+</div>
+
+<!-- KAUNAS / VILNIUS -->
+<div class="sec ns" style="margin-top:22px">Kaunas ir Vilnius · Nuolatinės</div>
+<div class="city-stack">
+  <div class="city-card nk">
+    <div class="city-head"><span>🟠 Kaunas</span><span class="badge kns">KNS</span></div>
+    <div class="city-kpi" style="grid-template-columns:repeat(6,1fr)">
+      <div class="ck">
+        <div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">104</span><span class="ck-sep">→</span><span class="ck-v5">176</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +72 (+69%)</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Įmokos EUR</div>
+        <div class="ck-pair"><span class="ck-v4">967</span><span class="ck-sep">→</span><span class="ck-v5">1 688</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +721€ (+75%)</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">9,30</span><span class="ck-sep">→</span><span class="ck-v5">9,59</span></div>
+        <div class="ck-sub">€ / sut.</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Valandos</div>
+        <div class="ck-pair"><span class="ck-v4">411,2</span><span class="ck-sep">→</span><span class="ck-v5">687,8</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +270,6</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">€ / val.</div>
+        <div class="ck-pair"><span class="ck-v4">2.33</span><span class="ck-sep">→</span><span class="ck-v5">2.45</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +0,12</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Sut. / val.</div>
+        <div class="ck-pair"><span class="ck-v4">0.248</span><span class="ck-sep">→</span><span class="ck-v5">0.256</span></div>
+        <div class="ck-sub" style="color:var(--muted)">stabili</div>
+      </div>
+    </div>
+  </div>
+  <div class="city-card nk">
+    <div class="city-head"><span>🔵 Vilnius</span><span class="badge vln">VLN</span></div>
+    <div class="city-kpi" style="grid-template-columns:repeat(6,1fr)">
+      <div class="ck">
+        <div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">23</span><span class="ck-sep">→</span><span class="ck-v5">74</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +51 (+222%)</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Įmokos EUR</div>
+        <div class="ck-pair"><span class="ck-v4">200</span><span class="ck-sep">→</span><span class="ck-v5">672</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +472€ (+236%)</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">8,70</span><span class="ck-sep">→</span><span class="ck-v5">9,08</span></div>
+        <div class="ck-sub">€ / sut.</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Valandos</div>
+        <div class="ck-pair"><span class="ck-v4">140,8</span><span class="ck-sep">→</span><span class="ck-v5">296,0</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +159,2</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">€ / val.</div>
+        <div class="ck-pair"><span class="ck-v4">1.43</span><span class="ck-sep">→</span><span class="ck-v5">2.27</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +0,84</div>
+      </div>
+      <div class="ck">
+        <div class="ck-lbl">Sut. / val.</div>
+        <div class="ck-pair"><span class="ck-v4">0.163</span><span class="ck-sep">→</span><span class="ck-v5">0.25</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +0,087</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DONUTS -->
+<div class="sec ns" style="margin-top:22px">Kaunas / Vilnius pasiskirstymas</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+  <div class="donut-card">
+    <div class="donut-title">Balandis · Sutartys ir įmokos (K/V)</div>
+    <div style="display:flex;justify-content:center;gap:16px;align-items:center;margin:12px 0">
+      <div>
+        <div style="font-size:11px;text-align:center;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Sutartys</div>
+        <div style="position:relative;width:140px;height:140px">
+          <canvas id="d1"></canvas>
+          <div class="donut-center"><div class="donut-center-val">127</div><div class="donut-center-lbl">sut.</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;text-align:center;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Įmokos €</div>
+        <div style="position:relative;width:140px;height:140px">
+          <canvas id="d1b"></canvas>
+          <div class="donut-center"><div class="donut-center-val">1 167</div><div class="donut-center-lbl">€</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item">
+        <span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--kns)"></span>Kaunas</span>
+        <span style="font-weight:700;color:var(--kns)">104 sut. · 967 €</span>
+      </div>
+      <div class="donut-leg-item">
+        <span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--vln)"></span>Vilnius</span>
+        <span style="font-weight:700;color:var(--vln)">23 sut. · 200 €</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="donut-card">
+    <div class="donut-title">Gegužė · Sutartys ir įmokos (K/V)</div>
+    <div style="display:flex;justify-content:center;gap:16px;align-items:center;margin:12px 0">
+      <div>
+        <div style="font-size:11px;text-align:center;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Sutartys</div>
+        <div style="position:relative;width:140px;height:140px">
+          <canvas id="d2"></canvas>
+          <div class="donut-center"><div class="donut-center-val">250</div><div class="donut-center-lbl">sut.</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;text-align:center;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Įmokos €</div>
+        <div style="position:relative;width:140px;height:140px">
+          <canvas id="d2b"></canvas>
+          <div class="donut-center"><div class="donut-center-val">2 360</div><div class="donut-center-lbl">€</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item">
+        <span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--kns)"></span>Kaunas</span>
+        <span style="font-weight:700;color:var(--kns)">176 sut. · 1 688 €</span>
+      </div>
+      <div class="donut-leg-item">
+        <span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--vln)"></span>Vilnius</span>
+        <span style="font-weight:700;color:var(--vln)">74 sut. · 672 €</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LOKACIJOS su filtru -->
+<div class="sec ns" style="margin-top:22px">Lokacijos · Nuolatinės</div>
+<div class="city-filter">
+  <button class="cf-btn active-all" onclick="filterLok(this,'all','lok-table')">Visos</button>
+  <button class="cf-btn" onclick="filterLok(this,'K','lok-table')">🟠 Kaunas</button>
+  <button class="cf-btn" onclick="filterLok(this,'V','lok-table')">🔵 Vilnius</button>
+</div>
+<div class="card nk">
+  <div class="card-head">
+    <span>Lokacijos · nuolatinės sutartys</span>
+    <span style="font-size:13px;color:var(--muted);font-weight:400">€/val: <span class="eff hi">≥2,5</span> <span class="eff md">1,2–2,4</span> <span class="eff lo">&lt;1,2</span></span>
+  </div>
+  <table id="lok-table">
+    <thead><tr>
+      <th>Lokacija</th>
+      <th class="r m4h">04 sut.</th><th class="r m4h">04 €</th><th class="r m4h">04 val.</th><th class="r m4h">04 €/val</th><th class="r m4h">04 sut./val</th>
+      <th class="sep"></th>
+      <th class="r m5h">05 sut.</th><th class="r m5h">05 €</th><th class="r m5h">05 val.</th><th class="r m5h">05 €/val</th><th class="r m5h">05 sut./val</th>
+      <th class="r">∆ sut.</th>
+    </tr></thead>
+    <tbody>
+    <script>
+    const NLOK=[
+      {n:"Karaliaus Mindaugo pr.49 X944",c:'K',m4:{s:34,e:314,v:159.4,ev:1.97,sv:0.213},m5:{s:83,e:777,v:305.8,ev:2.54,sv:0.271}},
+      {n:"Nežinoma",c:'N',m4:{s:22,e:222,v:0,ev:0,sv:0},m5:{s:67,e:653,v:0,ev:0,sv:0}},
+      {n:"Ozo g. 25 X555 AKROPOLIO MAXIMA",c:'V',m4:{s:22,e:199,v:140.8,ev:1.41,sv:0.156},m5:{s:47,e:423,v:292.7,ev:1.45,sv:0.161}},
+      {n:"K. Baršausko g. 66A X250 MOLAS",c:'K',m4:{s:22,e:183,v:120.6,ev:1.52,sv:0.182},m5:{s:14,e:145,v:118.8,ev:1.22,sv:0.118}},
+      {n:"Veiverių g. 150B X916",c:'K',m4:{s:13,e:131,v:45.8,ev:2.86,sv:0.284},m5:{s:5,e:60,v:34.8,ev:1.72,sv:0.144}},
+      {n:"Naujakurių g. 31 X887",c:'K',m4:{s:3,e:32,v:12.1,ev:2.64,sv:0.248},m5:{s:11,e:118,v:56.8,ev:2.08,sv:0.194}},
+      {n:"Šarkuvos g. 1A X124",c:'K',m4:{s:8,e:59,v:68.8,ev:0.86,sv:0.116},m5:{s:3,e:27,v:31.8,ev:0.85,sv:0.094}},
+      {n:"Savanorių pr. 255 X866 HYPER MAXIMA",c:'K',m4:{s:2,e:22,v:3.8,ev:5.79,sv:0.526},m5:{s:2,e:17,v:11.9,ev:1.43,sv:0.168}},
+      {n:"Jonavos g. 60 X590 RIVER MOLAS",c:'K',m4:{s:1,e:5,v:4.0,ev:1.25,sv:0.25},m5:{s:3,e:15,v:4.0,ev:3.75,sv:0.75}},
+      {n:"Skulptūra \"Zen triušis\"",c:'K',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:4,e:42,v:12.0,ev:3.5,sv:0.333}},
+      {n:"Vinco Kudirkos Aikštė",c:'V',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:3,e:15,v:0,ev:0,sv:0}},
+      {n:"V. Krėvės pr. 14B X099",c:'K',m4:{s:0,e:0,v:2.7,ev:0.0,sv:0.0},m5:{s:3,e:36,v:4.0,ev:9.0,sv:0.75}},
+      {n:"Nepriklausomybės a.",c:'K',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:2,e:17,v:95.9,ev:0.18,sv:0.021}},
+      {n:"Kauno Pilis",c:'K',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:1,e:5,v:0,ev:0,sv:0}},
+      {n:"V. Pociūno g. 8 VILNIUS OUTLET",c:'V',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:1,e:5,v:7.3,ev:0.68,sv:0.137}},
+      {n:"Laisvės al. 93 ir 95",c:'K',m4:{s:0,e:0,v:0,ev:0,sv:0},m5:{s:1,e:5,v:12.0,ev:0.42,sv:0.083}},
+    ].sort((a,b)=>b.m5.s-a.m5.s);
+
+    function ep(v,t1,t2){if(!v)return'<span style="color:var(--muted)">—</span>';const c=v>=t1?'hi':v>=t2?'md':'lo';return`<span class="eff ${c}">${v.toFixed(2)}</span>`}
+    NLOK.forEach(l=>{
+      const isNew=l.m4.s===0&&l.m5.s>0;
+      const cb=l.c==='K'?'<span class="badge kns">K</span>':'<span class="badge vln">V</span>';
+      const d=l.m5.s-l.m4.s;const dS=(d>0?'+':'')+d;const dC=d>0?'gv':d<0?'ov':'mv';
+      document.write(`<tr data-city="${l.c}">
+        <td class="name">${cb} ${l.n}${isNew?' <span class="badge new">nauja</span>':''}</td>
+        <td class="m4v">${l.m4.s||'—'}</td><td class="mv">${l.m4.e||'—'}</td><td class="mv">${l.m4.v||'—'}</td>
+        <td class="r">${ep(l.m4.ev,2.5,1.2)}</td><td class="mv">${l.m4.sv?l.m4.sv.toFixed(3):'—'}</td>
+        <td class="sep">│</td>
+        <td class="m5v">${l.m5.s||'—'}</td><td class="mv">${l.m5.e||'—'}</td><td class="mv">${l.m5.v||'—'}</td>
+        <td class="r">${ep(l.m5.ev,2.5,1.2)}</td><td class="mv">${l.m5.sv?l.m5.sv.toFixed(3):'—'}</td>
+        <td class="${dC}">${dS}</td>
+      </tr>`);
+    });
+    </script>
+    </tbody>
+  </table>
+  <div class="card-note">€/val ir sut./val = nuolatinių įmokos ir sut. ÷ grafiko valandos</div>
+</div>
+
+<!-- FACER'IAI su filtru -->
+<div class="sec ns" style="margin-top:22px">Facer'iai · Nuolatinės</div>
+<div class="city-filter">
+  <button class="cf-btn active-all" onclick="filterLok(this,'all','fac-table')">Visi</button>
+  <button class="cf-btn" onclick="filterLok(this,'K','fac-table')">🟠 Kaunas</button>
+  <button class="cf-btn" onclick="filterLok(this,'V','fac-table')">🔵 Vilnius</button>
+</div>
+<div class="card nk">
+  <div class="card-head">
+    <span>Facer'iai · nuolatinės sutartys</span>
+    <span style="font-size:13px;color:var(--muted);font-weight:400">€/val: <span class="eff hi">≥4,0</span> <span class="eff md">2,0–3,9</span> <span class="eff lo">&lt;2,0</span></span>
+  </div>
+  <table id="fac-table">
+    <thead><tr>
+      <th>Facer'is</th>
+      <th class="r m4h">04 sut.</th><th class="r m4h">04 €</th><th class="r m4h">04 val.</th><th class="r m4h">04 €/val</th><th class="r m4h">04 sut./val</th>
+      <th class="sep"></th>
+      <th class="r m5h">05 sut.</th><th class="r m5h">05 €</th><th class="r m5h">05 val.</th><th class="r m5h">05 €/val</th><th class="r m5h">05 sut./val</th>
+      <th class="r">∆</th>
+    </tr></thead>
+    <tbody>
+    <script>
+    const NFAC=[
+      {v:"Beatričė Cibulskytė",c:'V',m4:{s:9,e:90,val:0.0,ev:0,sv:0},m5:{s:43,e:404,val:26.5,ev:15.25,sv:1.623}},
+      {v:"Austėja Kameneneckaitė",c:'K',m4:{s:8,e:50,val:28.0,ev:1.79,sv:0.286},m5:{s:31,e:237,val:48.6,ev:4.88,sv:0.638}},
+      {v:"Rokas Pakalniškis",c:'K',m4:{s:18,e:209,val:37.5,ev:5.57,sv:0.48},m5:{s:14,e:168,val:67.4,ev:2.49,sv:0.208}},
+      {v:"Emilė Surdokaitė",c:'K',m4:{s:10,e:81,val:12.3,ev:6.59,sv:0.813},m5:{s:19,e:205,val:31.2,ev:6.57,sv:0.609}},
+      {v:"Domas Vaitkevičius",c:'K',m4:{s:13,e:152,val:42.8,ev:3.55,sv:0.304},m5:{s:11,e:111,val:47.3,ev:2.35,sv:0.233}},
+      {v:"Jurgita Stankevičiūtė",c:'K',m4:{s:4,e:25,val:24.8,ev:1.01,sv:0.161},m5:{s:12,e:125,val:61.3,ev:2.04,sv:0.196}},
+      {v:"Mantas Šlekys",c:'K',m4:{s:2,e:32,val:0.0,ev:0,sv:0},m5:{s:14,e:167,val:14.2,ev:11.76,sv:0.986}},
+      {v:"Aleksas Vegis",c:'V',m4:{s:1,e:15,val:52.6,ev:0.29,sv:0.019},m5:{s:15,e:163,val:61.9,ev:2.63,sv:0.242}},
+      {v:"Julius Petkevičius",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:15,e:118,val:34.3,ev:3.44,sv:0.437}},
+      {v:"Jokūbas Norkus",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:14,e:113,val:26.0,ev:4.35,sv:0.538}},
+      {v:"Urtė Daugelaitė",c:'K',m4:{s:8,e:79,val:26.3,ev:3.0,sv:0.304},m5:{s:5,e:54,val:18.1,ev:2.98,sv:0.276}},
+      {v:"Milena Sčensnovič",c:'V',m4:{s:5,e:35,val:15.1,ev:2.32,sv:0.331},m5:{s:7,e:35,val:34.4,ev:1.02,sv:0.203}},
+      {v:"Emilija Lukauskaitė",c:'K',m4:{s:10,e:78,val:50.9,ev:1.53,sv:0.196},m5:{s:2,e:10,val:34.2,ev:0.29,sv:0.058}},
+      {v:"Austėja Lisauskaitė",c:'K',m4:{s:4,e:30,val:45.5,ev:0.66,sv:0.088},m5:{s:6,e:65,val:24.5,ev:2.65,sv:0.245}},
+      {v:"Fausta Sventickaite",c:'K',m4:{s:5,e:32,val:17.5,ev:1.83,sv:0.286},m5:{s:4,e:27,val:34.8,ev:0.78,sv:0.115}},
+      {v:"Gustė Špiliauskaitė",c:'K',m4:{s:3,e:29,val:7.7,ev:3.77,sv:0.39},m5:{s:5,e:89,val:3.1,ev:28.71,sv:1.613}},
+      {v:"Gaudenta Valiūnė",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:8,e:57,val:21.5,ev:2.65,sv:0.372}},
+      {v:"Vilius Rinkevičius",c:'K',m4:{s:2,e:27,val:0.0,ev:0,sv:0},m5:{s:6,e:62,val:18.9,ev:3.28,sv:0.317}},
+      {v:"Justė Vizgirdaitė",c:'K',m4:{s:3,e:22,val:24.1,ev:0.91,sv:0.124},m5:{s:3,e:15,val:30.0,ev:0.5,sv:0.1}},
+      {v:"Liepa Umbrasaitė",c:'K',m4:{s:5,e:42,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Jonė Kažemikaitytė",c:'V',m4:{s:4,e:40,val:13.0,ev:3.08,sv:0.308},m5:{s:0,e:0,val:19.6,ev:0.0,sv:0.0}},
+      {v:"Areta Kurjanovaitė",c:'K',m4:{s:3,e:22,val:12.0,ev:1.83,sv:0.25},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Deividas Vasilevskij",c:'V',m4:{s:3,e:15,val:29.4,ev:0.51,sv:0.102},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Kamilė Nadzekaitė",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:2,e:20,val:38.9,ev:0.51,sv:0.051}},
+      {v:"Nojus Kieras",c:'K',m4:{s:2,e:30,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Liepa Kazlauskaitė",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:2,e:25,val:0.0,ev:0,sv:0}},
+      {v:"Viktorija Iljasevičiūtė",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:2,e:10,val:8.9,ev:1.12,sv:0.225}},
+      {v:"Mindaugas Žulys",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:2,e:32,val:10.2,ev:3.14,sv:0.196}},
+      {v:"Deividas K. (Adrijus)",c:'V',m4:{s:2,e:10,val:7.0,ev:1.43,sv:0.286},m5:{s:0,e:0,val:103.5,ev:0.0,sv:0.0}},
+      {v:"Gabrielius Brodovskis",c:'V',m4:{s:0,e:0,val:19.9,ev:0.0,sv:0.0},m5:{s:2,e:10,val:20.5,ev:0.49,sv:0.098}},
+      {v:"Elija Basevičiūtė",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:2,e:15,val:0.0,ev:0,sv:0}},
+      {v:"Elada Zoidova",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:1,e:5,val:0.0,ev:0,sv:0}},
+      {v:"Elija Naus",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:1,e:3,val:0.0,ev:0,sv:0}},
+      {v:"Davidas Gozmanas",c:'K',m4:{s:1,e:5,val:18.2,ev:0.27,sv:0.055},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Grantas Tight Navard",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:1,e:10,val:0.0,ev:0,sv:0}},
+      {v:"Markas Arutiunian",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:1,e:5,val:0.0,ev:0,sv:0}},
+      {v:"Milda Nargelaitė",c:'V',m4:{s:1,e:5,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Gustė Salialionytė",c:'K',m4:{s:1,e:12,val:8.0,ev:1.5,sv:0.125},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Ema",c:'K',m4:{s:0,e:0,val:4.0,ev:0.0,sv:0.0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Uršulė",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:5.2,ev:0.0,sv:0.0}},
+      {v:"Adria",c:'V',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:5.3,ev:0.0,sv:0.0}},
+      {v:"Jonė",c:'K',m4:{s:0,e:0,val:4.0,ev:0.0,sv:0.0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Aleksandras",c:'V',m4:{s:0,e:0,val:9.8,ev:0.0,sv:0.0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+      {v:"Nojus",c:'K',m4:{s:0,e:0,val:43.5,ev:0.0,sv:0.0},m5:{s:0,e:0,val:130.3,ev:0.0,sv:0.0}},
+      {v:"Laura",c:'K',m4:{s:0,e:0,val:0.0,ev:0,sv:0},m5:{s:0,e:0,val:3.2,ev:0.0,sv:0.0}},
+      {v:"Emilė",c:'K',m4:{s:0,e:0,val:4.1,ev:0.0,sv:0.0},m5:{s:0,e:0,val:0.0,ev:0,sv:0}},
+    ].sort((a,b)=>b.m5.s-a.m5.s);
+
+    function fp(v,t1,t2){if(!v)return'<span style="color:var(--muted)">—</span>';const c=v>=t1?'hi':v>=t2?'md':'lo';return`<span class="eff ${c}">${v.toFixed(2)}</span>`}
+    NFAC.forEach(f=>{
+      const d=f.m5.s-f.m4.s;const dS=(d>0?'+':'')+d;const dC=d>0?'gv':d<0?'ov':'mv';
+      const isNew=f.m4.s===0&&f.m5.s>0;const isOut=f.m5.s===0&&f.m4.s>0;
+      const badge=isNew?'<span class="badge new">nauja</span>':isOut?'<span class="badge out">baigė</span>':'';
+      const cb=f.c==='K'?'<span class="badge kns">K</span>':'<span class="badge vln">V</span>';
+      document.write(`<tr data-city="${f.c}">
+        <td class="name">${cb} ${f.v} ${badge}</td>
+        <td class="m4v">${f.m4.s||'—'}</td><td class="mv">${f.m4.e||'—'}</td><td class="mv">${f.m4.val||'—'}</td>
+        <td class="r">${fp(f.m4.ev,4,2)}</td><td class="mv">${f.m4.sv?f.m4.sv.toFixed(3):'—'}</td>
+        <td class="sep">│</td>
+        <td class="m5v">${f.m5.s||'—'}</td><td class="mv">${f.m5.e||'—'}</td><td class="mv">${f.m5.val||'—'}</td>
+        <td class="r">${fp(f.m5.ev,4,2)}</td><td class="mv">${f.m5.sv?f.m5.sv.toFixed(3):'—'}</td>
+        <td class="${dC}">${dS}</td>
+      </tr>`);
+    });
+    </script>
+    </tbody>
+  </table>
+  <div class="card-note">? = miestas nenustatytas · Nežinoma = sutartys be lokacijos priskyrimo · Be sut. = valandos grafike, bet 0 apmokėtų sut.</div>
+</div>
+
+</div><!-- /panel-nuol -->
+
+<!-- ══════════ VIENKARTINĖS PANEL ══════════ -->
+<div id="panel-vienk" class="panel">
+
+<div class="sec vs">Bendri KPI · Vienkartinės</div>
+<div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+  <div class="kpi vk">
+    <div class="kpi-lbl">Sutartys</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">47</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">51</div></div>
+    </div>
+    <span class="delta up">↑ +4 (+9%)</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Įmokų suma</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">1 625</div><div class="kpi-sub">EUR</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">1 094</div><div class="kpi-sub">EUR</div></div>
+    </div>
+    <span class="delta dn">↓ −531€ (−33%)</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Vid. įmoka / sut.</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">34,6</div><div class="kpi-sub">€</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">21,5</div><div class="kpi-sub">€</div></div>
+    </div>
+    <span class="delta dn">↓ −13,1 €/sut.</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Kaunas / Vilnius</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">14/4</div><div class="kpi-sub">K/V sut.</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">13/8</div><div class="kpi-sub">K/V sut.</div></div>
+    </div>
+    <span class="delta up">↑ Vilnius auga</span>
+  </div>
+</div>
+
+<!-- VIENK DONUTS -->
+<div class="sec vs" style="margin-top:22px">Pasiskirstymas</div>
+<div class="donut-grid" style="grid-template-columns:repeat(2,1fr);max-width:600px">
+  <div class="donut-card">
+    <div class="donut-title">Sutartys · 04 vs 05</div>
+    <div class="donut-wrap"><canvas id="dv1"></canvas>
+      <div class="donut-center"><div class="donut-center-val">98</div><div class="donut-center-lbl">iš viso</div></div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m4)"></span>Balandis</span><span style="font-weight:700;color:var(--m4)">47 (48%)</span></div>
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m5)"></span>Gegužė</span><span style="font-weight:700;color:var(--m5)">51 (52%)</span></div>
+    </div>
+  </div>
+  <div class="donut-card">
+    <div class="donut-title">Suma EUR · 04 vs 05</div>
+    <div class="donut-wrap"><canvas id="dv2"></canvas>
+      <div class="donut-center"><div class="donut-center-val">2 719</div><div class="donut-center-lbl">EUR iš viso</div></div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m4)"></span>Balandis</span><span style="font-weight:700;color:var(--m4)">1 625€ (60%)</span></div>
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m5)"></span>Gegužė</span><span style="font-weight:700;color:var(--m5)">1 094€ (40%)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIENK KAUNAS / VILNIUS -->
+<div class="sec vs" style="margin-top:22px">Kaunas ir Vilnius · Vienkartinės</div>
+<div class="city-grid">
+  <div class="city-card vk">
+    <div class="city-head"><span>🟠 Kaunas · Vienkartinės</span><span class="badge kns">KNS</span></div>
+    <div class="city-kpi">
+      <div class="ck"><div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">14</span><span class="ck-sep">→</span><span class="ck-v5">13</span></div>
+        <div class="ck-sub" style="color:var(--orange);font-weight:700">↓ −1 sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Suma EUR</div>
+        <div class="ck-pair"><span class="ck-v4">663</span><span class="ck-sep">→</span><span class="ck-v5">184</span></div>
+        <div class="ck-sub" style="color:var(--orange);font-weight:700">↓ −479€</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">47,4</span><span class="ck-sep">→</span><span class="ck-v5">14,2</span></div>
+        <div class="ck-sub">€/sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">% visų K€</div>
+        <div class="ck-pair"><span class="ck-v4">47%</span><span class="ck-sep">→</span><span class="ck-v5">14%</span></div>
+        <div class="ck-sub">vienk. dalis</div>
+      </div>
+    </div>
+  </div>
+  <div class="city-card vk">
+    <div class="city-head"><span>🔵 Vilnius · Vienkartinės</span><span class="badge vln">VLN</span></div>
+    <div class="city-kpi">
+      <div class="ck"><div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">4</span><span class="ck-sep">→</span><span class="ck-v5">8</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +4 (+100%)</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Suma EUR</div>
+        <div class="ck-pair"><span class="ck-v4">40</span><span class="ck-sep">→</span><span class="ck-v5">105</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +65€</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">10,0</span><span class="ck-sep">→</span><span class="ck-v5">13,1</span></div>
+        <div class="ck-sub">€/sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">% visų V€</div>
+        <div class="ck-pair"><span class="ck-v4">17%</span><span class="ck-sep">→</span><span class="ck-v5">19%</span></div>
+        <div class="ck-sub">stabili dalis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIENK FACER'IAI -->
+<div class="sec vs" style="margin-top:22px">Facer'iai · Vienkartinės</div>
+<div class="city-filter">
+  <button class="cf-btn active-all" onclick="filterLok(this,'all','vfac-table')">Visi</button>
+  <button class="cf-btn" onclick="filterLok(this,'K','vfac-table')">🟠 Kaunas</button>
+  <button class="cf-btn" onclick="filterLok(this,'V','vfac-table')">🔵 Vilnius</button>
+</div>
+<div class="card vk">
+  <div class="card-head"><span>Facer'iai su vienkartinėmis</span></div>
+  <table id="vfac-table">
+    <thead><tr>
+      <th>Facer'is</th>
+      <th class="r m4h">04 sut.</th><th class="r m4h">04 suma €</th><th class="r m4h">04 vid. €</th>
+      <th class="sep"></th>
+      <th class="r m5h">05 sut.</th><th class="r m5h">05 suma €</th><th class="r m5h">05 vid. €</th>
+      <th class="r">∆ sut.</th>
+    </tr></thead>
+    <tbody>
+    <script>
+    const VFAC=[
+      {v:"Austėja Lisauskaitė",c:'?',m4:{s:34,e:1475},m5:{s:26,e:735}},
+      {v:"Beatričė Cibulskytė",c:'V',m4:{s:5,e:65},m5:{s:9,e:185}},
+      {v:"Domas Vaitkevičius",c:'K',m4:{s:4,e:40},m5:{s:0,e:0}},
+      {v:"Jurgita Stankevičiūtė",c:'K',m4:{s:0,e:0},m5:{s:3,e:40}},
+      {v:"Jonė Kažemikaitytė",c:'?',m4:{s:0,e:0},m5:{s:2,e:35}},
+      {v:"Rokas Pakalniškis",c:'K',m4:{s:2,e:25},m5:{s:0,e:0}},
+      {v:"Milena Sčensnovič",c:'K',m4:{s:0,e:0},m5:{s:2,e:20}},
+      {v:"Viktorija Iljasevičiūtė",c:'V',m4:{s:0,e:0},m5:{s:1,e:20}},
+      {v:"Emilė Surdokaitė",c:'?',m4:{s:1,e:15},m5:{s:0,e:0}},
+      {v:"Julius Petkevičius",c:'?',m4:{s:0,e:0},m5:{s:2,e:15}},
+      {v:"Kamilė Nadzekaitė",c:'V',m4:{s:0,e:0},m5:{s:1,e:12}},
+      {v:"Aleksas Vegis",c:'V',m4:{s:0,e:0},m5:{s:1,e:10}},
+      {v:"Jokūbas Norkus",c:'?',m4:{s:0,e:0},m5:{s:1,e:10}},
+      {v:"Austėja Kameneneckaitė",c:'V',m4:{s:0,e:0},m5:{s:2,e:7}},
+      {v:"Gaudenta Valiūnė",c:'?',m4:{s:0,e:0},m5:{s:1,e:5}},
+      {v:"Adrijus Kakaška",c:'?',m4:{s:1,e:5},m5:{s:0,e:0}},
+    ].filter(f=>f.m4.s+f.m5.s>0).sort((a,b)=>(b.m4.e+b.m5.e)-(a.m4.e+a.m5.e));
+
+    VFAC.forEach(f=>{
+      const v4=f.m4.s>0?Math.round(f.m4.e/f.m4.s*10)/10:0;
+      const v5=f.m5.s>0?Math.round(f.m5.e/f.m5.s*10)/10:0;
+      const d=f.m5.s-f.m4.s;const dS=(d>0?'+':'')+d;const dC=d>0?'gv':d<0?'ov':'mv';
+      const cb=f.c==='K'?'<span class="badge kns">K</span>':'<span class="badge vln">V</span>';
+      document.write(`<tr data-city="${f.c}">
+        <td class="name">${cb} ${f.v}</td>
+        <td class="m4v">${f.m4.s||'—'}</td><td class="mv">${f.m4.e||'—'}</td><td class="mv">${v4||'—'}</td>
+        <td class="sep">│</td>
+        <td class="m5v">${f.m5.s||'—'}</td><td class="mv">${f.m5.e||'—'}</td><td class="mv">${v5||'—'}</td>
+        <td class="${dC}">${f.m4.s||f.m5.s?dS:'—'}</td>
+      </tr>`);
+    });
+    </script>
+    </tbody>
+  </table>
+  <div class="card-note">Vienkartinėms €/val neskaičiuojama — tai nėra pasikartojančios pajamos · Austėja L. dominuoja abiem mėnesiais</div>
+</div>
+
+</div><!-- /panel-vienk -->
+
+
+</div><!-- /panel-nuol -->
+
+<!-- ══════════ VIENKARTINĖS PANEL ══════════ -->
+<div id="panel-vienk" class="panel">
+
+<div class="sec vs">Bendri KPI · Vienkartinės</div>
+<div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+  <div class="kpi vk">
+    <div class="kpi-lbl">Sutartys</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">47</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">51</div></div>
+    </div>
+    <span class="delta up">↑ +4 (+9%)</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Įmokų suma</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">1 625</div><div class="kpi-sub">EUR</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">1 094</div><div class="kpi-sub">EUR</div></div>
+    </div>
+    <span class="delta dn">↓ −531€ (−33%)</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Vid. įmoka / sut.</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">34,6</div><div class="kpi-sub">€</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">21,5</div><div class="kpi-sub">€</div></div>
+    </div>
+    <span class="delta dn">↓ −13,1 €/sut.</span>
+  </div>
+  <div class="kpi vk">
+    <div class="kpi-lbl">Kaunas / Vilnius</div>
+    <div class="kpi-pair">
+      <div class="kpi-box m4"><div class="kpi-mo m4">04</div><div class="kpi-n m4">14/4</div><div class="kpi-sub">K/V sut.</div></div>
+      <div class="kpi-box m5"><div class="kpi-mo m5">05</div><div class="kpi-n m5">13/8</div><div class="kpi-sub">K/V sut.</div></div>
+    </div>
+    <span class="delta up">↑ Vilnius auga</span>
+  </div>
+</div>
+
+<!-- VIENK DONUTS -->
+<div class="sec vs" style="margin-top:22px">Pasiskirstymas</div>
+<div class="donut-grid" style="grid-template-columns:repeat(2,1fr);max-width:600px">
+  <div class="donut-card">
+    <div class="donut-title">Sutartys · 04 vs 05</div>
+    <div class="donut-wrap"><canvas id="dv1"></canvas>
+      <div class="donut-center"><div class="donut-center-val">98</div><div class="donut-center-lbl">iš viso</div></div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m4)"></span>Balandis</span><span style="font-weight:700;color:var(--m4)">47 (48%)</span></div>
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m5)"></span>Gegužė</span><span style="font-weight:700;color:var(--m5)">51 (52%)</span></div>
+    </div>
+  </div>
+  <div class="donut-card">
+    <div class="donut-title">Suma EUR · 04 vs 05</div>
+    <div class="donut-wrap"><canvas id="dv2"></canvas>
+      <div class="donut-center"><div class="donut-center-val">2 719</div><div class="donut-center-lbl">EUR iš viso</div></div>
+    </div>
+    <div class="donut-legend">
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m4)"></span>Balandis</span><span style="font-weight:700;color:var(--m4)">1 625€ (60%)</span></div>
+      <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--m5)"></span>Gegužė</span><span style="font-weight:700;color:var(--m5)">1 094€ (40%)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIENK KAUNAS / VILNIUS -->
+<div class="sec vs" style="margin-top:22px">Kaunas ir Vilnius · Vienkartinės</div>
+<div class="city-grid">
+  <div class="city-card vk">
+    <div class="city-head"><span>🟠 Kaunas · Vienkartinės</span><span class="badge kns">KNS</span></div>
+    <div class="city-kpi">
+      <div class="ck"><div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">14</span><span class="ck-sep">→</span><span class="ck-v5">13</span></div>
+        <div class="ck-sub" style="color:var(--orange);font-weight:700">↓ −1 sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Suma EUR</div>
+        <div class="ck-pair"><span class="ck-v4">663</span><span class="ck-sep">→</span><span class="ck-v5">184</span></div>
+        <div class="ck-sub" style="color:var(--orange);font-weight:700">↓ −479€</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">47,4</span><span class="ck-sep">→</span><span class="ck-v5">14,2</span></div>
+        <div class="ck-sub">€/sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">% visų K€</div>
+        <div class="ck-pair"><span class="ck-v4">47%</span><span class="ck-sep">→</span><span class="ck-v5">14%</span></div>
+        <div class="ck-sub">vienk. dalis</div>
+      </div>
+    </div>
+  </div>
+  <div class="city-card vk">
+    <div class="city-head"><span>🔵 Vilnius · Vienkartinės</span><span class="badge vln">VLN</span></div>
+    <div class="city-kpi">
+      <div class="ck"><div class="ck-lbl">Sutartys</div>
+        <div class="ck-pair"><span class="ck-v4">4</span><span class="ck-sep">→</span><span class="ck-v5">8</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +4 (+100%)</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Suma EUR</div>
+        <div class="ck-pair"><span class="ck-v4">40</span><span class="ck-sep">→</span><span class="ck-v5">105</span></div>
+        <div class="ck-sub" style="color:var(--green);font-weight:700">↑ +65€</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">Vid. įmoka</div>
+        <div class="ck-pair"><span class="ck-v4">10,0</span><span class="ck-sep">→</span><span class="ck-v5">13,1</span></div>
+        <div class="ck-sub">€/sut.</div>
+      </div>
+      <div class="ck"><div class="ck-lbl">% visų V€</div>
+        <div class="ck-pair"><span class="ck-v4">17%</span><span class="ck-sep">→</span><span class="ck-v5">19%</span></div>
+        <div class="ck-sub">stabili dalis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIENK FACER'IAI -->
+<div class="sec vs" style="margin-top:22px">Facer'iai · Vienkartinės</div>
+<div class="city-filter">
+  <button class="cf-btn active-all" onclick="filterLok(this,'all','vfac-table')">Visi</button>
+  <button class="cf-btn" onclick="filterLok(this,'K','vfac-table')">🟠 Kaunas</button>
+  <button class="cf-btn" onclick="filterLok(this,'V','vfac-table')">🔵 Vilnius</button>
+</div>
+<div class="card vk">
+  <div class="card-head"><span>Facer'iai su vienkartinėmis</span></div>
+  <table id="vfac-table">
+    <thead><tr>
+      <th>Facer'is</th>
+      <th class="r m4h">04 sut.</th><th class="r m4h">04 suma €</th><th class="r m4h">04 vid. €</th>
+      <th class="sep"></th>
+      <th class="r m5h">05 sut.</th><th class="r m5h">05 suma €</th><th class="r m5h">05 vid. €</th>
+      <th class="r">∆ sut.</th>
+    </tr></thead>
+    <tbody>
+    <script>
+    const VFAC=[
+      {v:"Austėja Lisauskaitė",c:'?',m4:{s:34,e:1475},m5:{s:26,e:735}},
+      {v:"Beatričė Cibulskytė",c:'V',m4:{s:5,e:65},m5:{s:9,e:185}},
+      {v:"Domas Vaitkevičius",c:'K',m4:{s:4,e:40},m5:{s:0,e:0}},
+      {v:"Jurgita Stankevičiūtė",c:'K',m4:{s:0,e:0},m5:{s:3,e:40}},
+      {v:"Jonė Kažemikaitytė",c:'?',m4:{s:0,e:0},m5:{s:2,e:35}},
+      {v:"Rokas Pakalniškis",c:'K',m4:{s:2,e:25},m5:{s:0,e:0}},
+      {v:"Milena Sčensnovič",c:'K',m4:{s:0,e:0},m5:{s:2,e:20}},
+      {v:"Viktorija Iljasevičiūtė",c:'V',m4:{s:0,e:0},m5:{s:1,e:20}},
+      {v:"Emilė Surdokaitė",c:'?',m4:{s:1,e:15},m5:{s:0,e:0}},
+      {v:"Julius Petkevičius",c:'?',m4:{s:0,e:0},m5:{s:2,e:15}},
+      {v:"Kamilė Nadzekaitė",c:'V',m4:{s:0,e:0},m5:{s:1,e:12}},
+      {v:"Aleksas Vegis",c:'V',m4:{s:0,e:0},m5:{s:1,e:10}},
+      {v:"Jokūbas Norkus",c:'?',m4:{s:0,e:0},m5:{s:1,e:10}},
+      {v:"Austėja Kameneneckaitė",c:'V',m4:{s:0,e:0},m5:{s:2,e:7}},
+      {v:"Gaudenta Valiūnė",c:'?',m4:{s:0,e:0},m5:{s:1,e:5}},
+      {v:"Adrijus Kakaška",c:'?',m4:{s:1,e:5},m5:{s:0,e:0}},
+    ].filter(f=>f.m4.s+f.m5.s>0).sort((a,b)=>(b.m4.e+b.m5.e)-(a.m4.e+a.m5.e));
+
+    VFAC.forEach(f=>{
+      const v4=f.m4.s>0?Math.round(f.m4.e/f.m4.s*10)/10:0;
+      const v5=f.m5.s>0?Math.round(f.m5.e/f.m5.s*10)/10:0;
+      const d=f.m5.s-f.m4.s;const dS=(d>0?'+':'')+d;const dC=d>0?'gv':d<0?'ov':'mv';
+      const cb=f.c==='K'?'<span class="badge kns">K</span>':'<span class="badge vln">V</span>';
+      document.write(`<tr data-city="${f.c}">
+        <td class="name">${cb} ${f.v}</td>
+        <td class="m4v">${f.m4.s||'—'}</td><td class="mv">${f.m4.e||'—'}</td><td class="mv">${v4||'—'}</td>
+        <td class="sep">│</td>
+        <td class="m5v">${f.m5.s||'—'}</td><td class="mv">${f.m5.e||'—'}</td><td class="mv">${v5||'—'}</td>
+        <td class="${dC}">${f.m4.s||f.m5.s?dS:'—'}</td>
+      </tr>`);
+    });
+    </script>
+    </tbody>
+  </table>
+  <div class="card-note">Vienkartinėms €/val neskaičiuojama — tai nėra pasikartojančios pajamos · Austėja L. dominuoja abiem mėnesiais</div>
+</div>
+
+</div><!-- /panel-vienk -->
+
+
+<script>
+window.addEventListener('load', function() {
+  // Donuts
+  function donut(id, data, labels, colors) {
+    new Chart(document.getElementById(id), {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] },
+      options: { cutout: '70%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } } }, animation: { duration: 600 } }
+    });
+  }
+  // Nuolatinės donuts
+  donut('d1',  [104,23],    ['Kaunas','Vilnius'], ['#C0181C','#1A5276']);
+  donut('d1b', [967,200],  ['Kaunas','Vilnius'], ['#C0181C','#1A5276']);
+  donut('d2',  [176,74],   ['Kaunas','Vilnius'], ['#C0181C','#1A5276']);
+  donut('d2b', [1688,672], ['Kaunas','Vilnius'], ['#C0181C','#1A5276']);
+    donut('dv1', [47,51], ['Balandis','Gegužė'], ['#C0181C','#1A5276']);
+  donut('dv2', [1625,1094], ['Balandis','Gegužė'], ['#C0181C','#1A5276']);
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  if(tab==='imokos'){event.target.style.background='#E8F5E9';event.target.style.color='#1B5E20';event.target.style.border='1px solid #A5D6A7';}else{event.target.style.background='';}
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function filterLok(btn, city, tableId) {
+  // Update button styles
+  const group = btn.parentElement;
+  group.querySelectorAll('.cf-btn').forEach(b => {
+    b.className = 'cf-btn';
+  });
+  btn.className = 'cf-btn ' + (city==='all'?'active-all':city==='K'?'active-kns':'active-vln');
+
+  // Filter rows
+  const table = document.getElementById(tableId);
+  table.querySelectorAll('tbody tr').forEach(row => {
+    const rc = row.getAttribute('data-city');
+    const isNez = rc === 'N';
+    row.classList.toggle('hidden', city !== 'all' && rc !== city && !isNez);
+  });
+}
+</script>
+
+<!-- ══════════ ĮMOKŲ ANALIZĖ 01-05 PANEL ══════════ -->
+<div id="panel-imokos" class="panel">
+
+<div class="sec" style="border-bottom-color:#2E7D32;color:#2E7D32;margin-top:0">📊 Įmokų analizė · Sausis–Gegužė 2026</div>
+
+<div style="background:#E8F5E9;border:1px solid #A5D6A7;border-radius:10px;padding:11px 16px;margin-bottom:20px;font-size:13px;color:#1B5E20;line-height:1.6">
+  <strong>Kontekstas:</strong> „Apmokėta" (Neopay) = sutartis sudaryta, bet <strong>tai nereiškia, kad pinigai gauti</strong>.
+  Realiai apmokėta = pirmoji įmoka tikrai nuskaičiuota. Stulpelis „Apmokėta / Neapmokėta" rodo realų apmokėjimą.
+</div>
+
+<!-- TOP KPI -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px">
+  <div class="kpi" style="border-top:3px solid var(--nuol)">
+    <div class="kpi-lbl" style="color:var(--nuol)">✅ Nuolatinės · realiai apmokėtos</div>
+    <div style="display:flex;gap:12px;align-items:baseline;margin:8px 0">
+      <div><span style="font-size:30px;font-weight:700;color:var(--nuol)">614</span><span style="font-size:13px;color:var(--muted);margin-left:4px">sut.</span></div>
+      <div><span style="font-size:22px;font-weight:700;color:var(--text)">5 901 €</span></div>
+    </div>
+    <div style="font-size:13px;color:var(--muted)">Vid. įmoka: <strong>9,61 €</strong> · K: 456 / V: 145</div>
+  </div>
+  <div class="kpi" style="border-top:3px solid var(--orange)">
+    <div class="kpi-lbl" style="color:var(--orange)">❌ Nuolatinės · neapmokėtos</div>
+    <div style="display:flex;gap:12px;align-items:baseline;margin:8px 0">
+      <div><span style="font-size:30px;font-weight:700;color:var(--orange)">162</span><span style="font-size:13px;color:var(--muted);margin-left:4px">sut.</span></div>
+      <div><span style="font-size:22px;font-weight:700;color:var(--text)">1 554 €</span></div>
+    </div>
+    <div style="font-size:13px;color:var(--orange);font-weight:700">⚠ 20,8% visų sudarytų nesumokama</div>
+  </div>
+  <div class="kpi" style="border-top:3px solid var(--vienk)">
+    <div class="kpi-lbl" style="color:var(--vienk)">💜 Vienkartinės · realiai apmokėtos</div>
+    <div style="display:flex;gap:12px;align-items:baseline;margin:8px 0">
+      <div><span style="font-size:30px;font-weight:700;color:var(--vienk)">420</span><span style="font-size:13px;color:var(--muted);margin-left:4px">sut.</span></div>
+      <div><span style="font-size:22px;font-weight:700;color:var(--text)">9 042 €</span></div>
+    </div>
+    <div style="font-size:13px;color:var(--muted)">Vid. įmoka: <strong>21,53 €</strong> · K: 363 / V: 46</div>
+  </div>
+</div>
+
+<!-- 1 EILĖ: Stulpelių grafikas + blynas -->
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px">
+
+  <!-- Stulpeliai: nuolatinės apmokėtos + neapmokėtos -->
+  <div class="card">
+    <div class="card-head"><span>Nuolatinės sutartys · apmokėtos vs neapmokėtos · pagal mėnesį</span></div>
+    <div style="padding:16px;height:260px">
+      <canvas id="ch_nuol_stack"></canvas>
+    </div>
+  </div>
+
+  <!-- Blynas: K/V pasiskirstymas nuolatinių -->
+  <div class="card">
+    <div class="card-head"><span>Kaunas / Vilnius · nuolatinės apmokėtos</span></div>
+    <div style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="position:relative;width:160px;height:160px;margin-top:8px">
+        <canvas id="ch_kv_donut"></canvas>
+        <div class="donut-center"><div class="donut-center-val">614</div><div class="donut-center-lbl">sut.</div></div>
+      </div>
+      <div class="donut-legend" style="width:100%">
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--kns)"></span>Kaunas</span><span style="font-weight:700;color:var(--kns)">456 (74%)</span></div>
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:var(--vln)"></span>Vilnius</span><span style="font-weight:700;color:var(--vln)">145 (24%)</span></div>
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:#ccc"></span>#N/A</span><span style="font-weight:700;color:var(--muted)">13 (2%)</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 2 EILĖ: Linijinis + neapmokėtų % -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+
+  <!-- Linijinis: EUR dinamika -->
+  <div class="card">
+    <div class="card-head"><span>Įmokų suma (EUR) · mėnesinė dinamika · K ir V atskirai</span></div>
+    <div style="padding:16px;height:240px">
+      <canvas id="ch_eur_line"></canvas>
+    </div>
+  </div>
+
+  <!-- Stulpeliai: neapmokėtų % -->
+  <div class="card">
+    <div class="card-head"><span>Neapmokėtų % nuo visų sudarytų · pagal mėnesį</span></div>
+    <div style="padding:16px;height:240px">
+      <canvas id="ch_neap_pct"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- 3 EILĖ: Vienkartinės stulpeliai + blynas -->
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px">
+
+  <!-- Vienkartinių EUR stulpeliai -->
+  <div class="card">
+    <div class="card-head"><span>Vienkartinės įmokos (EUR) · pagal mėnesį ir miestą</span></div>
+    <div style="padding:16px;height:250px">
+      <canvas id="ch_vienk_bar"></canvas>
+    </div>
+  </div>
+
+  <!-- Vienkartinių blynas -->
+  <div class="card">
+    <div class="card-head"><span>Kaunas / Vilnius · vienkartinės EUR</span></div>
+    <div style="padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="position:relative;width:150px;height:150px;margin-top:8px">
+        <canvas id="ch_vienk_donut"></canvas>
+        <div class="donut-center"><div class="donut-center-val">9 042</div><div class="donut-center-lbl">EUR</div></div>
+      </div>
+      <div class="donut-legend" style="width:100%">
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:#E67E22"></span>Kaunas</span><span style="font-weight:700;color:#E67E22">8 223 € (91%)</span></div>
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:#8E44AD"></span>Vilnius</span><span style="font-weight:700;color:#8E44AD">670 € (7%)</span></div>
+        <div class="donut-leg-item"><span style="display:flex;align-items:center;gap:6px"><span class="donut-leg-dot" style="background:#ccc"></span>#N/A</span><span style="font-weight:700;color:var(--muted)">150 € (2%)</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAUJA: Sudaryta vs Apmokėta EUR -->
+<div class="card" style="margin-bottom:14px">
+  <div class="card-head"><span>Nuolatinės apmokėtos (K+V) · sutartys ir įmokos EUR · mėnesinė dinamika</span>
+  </div>
+  <div style="padding:16px;height:270px">
+    <canvas id="ch_sudaryta"></canvas>
+  </div>
+  <div class="card-note">Mėlyni stulpeliai = sutarčių skaičius (kairė ašis) · Raudona linija = įmokų suma EUR (dešinė ašis) · Duomenys: Kaunas + Vilnius kartu</div>
+</div>
+
+<!-- SANTRAUKA -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+  <div class="sum-box" style="border-top:3px solid var(--nuol)">
+    <div class="sum-title" style="color:var(--nuol)">✅ Realios pajamos iš viso</div>
+    <div class="sum-item"><span style="color:var(--nuol)">N</span>Nuolatinės: 614 sut. / 5 901 €</div>
+    <div class="sum-item"><span style="color:var(--vienk)">V</span>Vienkartinės: 420 sut. / 9 042 €</div>
+    <div class="sum-item" style="font-weight:700;color:var(--text)"><span>∑</span>Viso: <strong>14 943 €</strong></div>
+  </div>
+  <div class="sum-box" style="border-top:3px solid var(--orange)">
+    <div class="sum-title" style="color:var(--orange)">⚠ Neapmokėtų tendencija</div>
+    <div class="sum-item"><span style="color:var(--orange)">!</span>Blogiausias mėnuo: Vasaris (35%)</div>
+    <div class="sum-item"><span style="color:var(--green)">↓</span>Gegužė: 20,6% — artėja prie normos</div>
+    <div class="sum-item"><span>~</span>Prarastos pajamos: ~1 554 €</div>
+  </div>
+  <div class="sum-box" style="border-top:3px solid #2E7D32">
+    <div class="sum-title" style="color:#2E7D32">📈 Pagrindinės tendencijos</div>
+    <div class="sum-item"><span style="color:var(--green)">↑</span>Nuolatinės auga: 79→250/mėn. (+217%)</div>
+    <div class="sum-item"><span style="color:var(--orange)">↓</span>Vienkartinės mažėja: 145→51/mėn.</div>
+    <div class="sum-item"><span style="color:var(--green)">↑</span>Vilnius: 21→74 sut. (+252%)</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const MENIAI = ['Sausis','Vasaris','Kovas','Balandis','Gegužė'];
+  const KNS = '#C0181C'; const VLN = '#1A5276';
+  const GRN = '#1E8449'; const ORN = '#C0392B'; const GRY = '#999';
+
+  // 1. Nuolatinės stacked: apmokėtos K, apmokėtos V, neapmokėtos
+  const ctx1 = document.getElementById('ch_nuol_stack').getContext('2d');
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: MENIAI,
+      datasets: [
+        { label: 'Apmokėta · Kaunas',  data:[46,32,97,105,176], backgroundColor:'#C0181C', borderRadius:3, barPercentage:0.75 },
+        { label: 'Apmokėta · Vilnius', data:[21,11,16,23,74],   backgroundColor:'#1A5276', borderRadius:3, barPercentage:0.75 },
+        { label: 'Neapmokėta (viso)',   data:[13,23,32,29,65],   backgroundColor:'rgba(230,126,34,0.35)', borderColor:'#E67E22', borderWidth:1.5, borderRadius:3, barPercentage:0.75 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ font:{family:"'Atkinson Hyperlegible'",size:12}, boxWidth:14, padding:10 }}},
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}}},
+        y:{ grid:{color:'#EEF0F4'}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}}}
+      }
+    }
+  });
+
+  // 2. K/V blynas
+  new Chart(document.getElementById('ch_kv_donut'), {
+    type:'doughnut',
+    data:{ labels:['Kaunas','Vilnius','#N/A'], datasets:[{ data:[456,145,13], backgroundColor:[KNS,VLN,GRY], borderWidth:2, borderColor:'#fff' }]},
+    options:{ cutout:'70%', plugins:{ legend:{display:false}}, animation:{duration:600}}
+  });
+
+  // 3. EUR linijinis
+  const ctx3 = document.getElementById('ch_eur_line').getContext('2d');
+  new Chart(ctx3, {
+    type:'line',
+    data:{
+      labels: MENIAI,
+      datasets:[
+        { label:'Kaunas · nuolatinės €', data:[556,407,928,979,1688], borderColor:'#C0181C', backgroundColor:'rgba(192,24,28,0.07)', fill:true, tension:0.3, pointRadius:5, pointBackgroundColor:'#C0181C', borderWidth:2.5 },
+        { label:'Vilnius · nuolatinės €', data:[159,65,112,200,672],   borderColor:'#1A5276', backgroundColor:'rgba(26,82,118,0.07)', fill:true, tension:0.3, pointRadius:5, pointBackgroundColor:'#1A5276', borderWidth:2.5 },
+        { label:'Kaunas · vienkartinės €', data:[2193,2336,1310,1560,824], borderColor:'#E67E22', borderDash:[6,3], backgroundColor:'transparent', tension:0.3, pointRadius:4, pointBackgroundColor:'#E67E22', borderWidth:2 },
+        { label:'Vilnius · vienkartinės €', data:[235,60,40,65,270],        borderColor:'#8E44AD', borderDash:[6,3], backgroundColor:'transparent', tension:0.3, pointRadius:4, pointBackgroundColor:'#8E44AD', borderWidth:2 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ font:{family:"'Atkinson Hyperlegible'",size:12}, boxWidth:14, padding:8, usePointStyle:true }}},
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}}},
+        y:{ grid:{color:'#EEF0F4'}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}, callback:v=>v+'€'}}
+      }
+    }
+  });
+
+  // 4. Neapmokėtų %
+  const ctx4 = document.getElementById('ch_neap_pct').getContext('2d');
+  new Chart(ctx4, {
+    type:'bar',
+    data:{
+      labels: MENIAI,
+      datasets:[
+        { label:'% neapmokėta', data:[14,35,22,18,21],
+          backgroundColor: [14,35,22,18,21].map(v => v>=30?'#C0392B':v>=20?'#E67E22':'#1E8449'),
+          borderRadius:4 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        annotation:{}
+      },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}}},
+        y:{ grid:{color:'#EEF0F4'}, min:0, max:45,
+            ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}, callback:v=>v+'%'},
+            afterDraw(chart){ const ctx=chart.ctx; ctx.save(); ctx.beginPath(); ctx.moveTo(chart.chartArea.left,chart.scales.y.getPixelForValue(20)); ctx.lineTo(chart.chartArea.right,chart.scales.y.getPixelForValue(20)); ctx.strokeStyle='rgba(192,57,43,0.4)'; ctx.setLineDash([6,4]); ctx.lineWidth=1.5; ctx.stroke(); ctx.restore(); }
+          }
+      },
+      animation:{ onComplete(ctx){ const ch=ctx.chart; const ds=ch.data.datasets[0]; ch.data.datasets[0].data.forEach((v,i)=>{ const meta=ch.getDatasetMeta(0); const bar=meta.data[i]; const x=bar.x; const y=bar.y; ch.ctx.save(); ch.ctx.fillStyle='#333'; ch.ctx.font="bold 13px 'Atkinson Hyperlegible'"; ch.ctx.textAlign='center'; ch.ctx.fillText(v+'%',x,y-6); ch.ctx.restore(); }); }}
+    }
+  });
+
+  // 5. Vienkartinių stulpeliai
+  const ctx5 = document.getElementById('ch_vienk_bar').getContext('2d');
+  new Chart(ctx5, {
+    type:'bar',
+    data:{
+      labels: MENIAI,
+      datasets:[
+        { label:'Kaunas',  data:[2193,2336,1310,1560,824], backgroundColor:'#E67E22', borderRadius:3 },
+        { label:'Vilnius', data:[235,60,40,65,270],         backgroundColor:'#8E44AD', borderRadius:3 },
+        { label:'#N/A',    data:[130,20,0,0,0],             backgroundColor:GRY, borderRadius:3 },
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ font:{family:"'Atkinson Hyperlegible'",size:12}, boxWidth:14, padding:10 }}},
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}}},
+        y:{ grid:{color:'#EEF0F4'}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:12}, callback:v=>v+'€'}}
+      }
+    }
+  });
+
+  // 6. Vienkartinių blynas
+  new Chart(document.getElementById('ch_vienk_donut'), {
+    type:'doughnut',
+    data:{ labels:['Kaunas','Vilnius','#N/A'], datasets:[{ data:[8223,670,150], backgroundColor:['#E67E22','#8E44AD',GRY], borderWidth:2, borderColor:'#fff' }]},
+    options:{ cutout:'70%', plugins:{ legend:{display:false}}, animation:{duration:600}}
+  });
+
+  // NAUJA: Sudaryta vs apmokėta
+  const ctx_s = document.getElementById('ch_sudaryta').getContext('2d');
+  new Chart(ctx_s, {
+    type: 'bar',
+    data: {
+      labels: MENIAI,
+      datasets: [
+        {
+          label: 'Sutarčių sk. (K+V)',
+          data:[79,43,114,128,250],
+          backgroundColor:'#1A5276',
+          borderRadius:4, order:2, yAxisID:'y'
+        },
+        {
+          label: 'Įmokų suma, EUR (K+V)',
+          type:'line',
+          data:[838,472,1052,1179,2360],
+          borderColor:'#C0181C', backgroundColor:'rgba(192,24,28,0.08)',
+          borderWidth:2.5, pointRadius:6, pointBackgroundColor:'#C0181C',
+          tension:0.3, order:1, yAxisID:'y2', fill:true
+        },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'bottom', labels:{ font:{family:"'Atkinson Hyperlegible'",size:12}, boxWidth:16, padding:16, usePointStyle:true }},
+        tooltip:{ mode:'index', intersect:false,
+          callbacks:{ label: ctx => ctx.dataset.yAxisID==='y2' ? ctx.dataset.label+': '+ctx.raw+' €' : ctx.dataset.label+': '+ctx.raw+' sut.' }
+        }
+      },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:"'Atkinson Hyperlegible'",size:13}}},
+        y:{ grid:{color:'#EEF0F4'},
+            title:{display:true,text:'Sutarčių sk.',font:{family:"'Atkinson Hyperlegible'",size:12},color:'#1A5276'},
+            ticks:{font:{family:"'Atkinson Hyperlegible'",size:12},color:'#1A5276'}},
+        y2:{ position:'right',
+             title:{display:true,text:'EUR',font:{family:"'Atkinson Hyperlegible'",size:12},color:'#C0181C'},
+             ticks:{font:{family:"'Atkinson Hyperlegible'",size:12},color:'#C0181C', callback:v=>v+'€'},
+             grid:{display:false}}
+      }
+    }
+  });
+
+})();
+</script>
+
+</div><!-- /panel-imokos -->
+
+
+</body>
+</html>

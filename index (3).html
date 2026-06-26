@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LRK Lėšų pritraukimas | Ataskaitos</title>
+<style>
+:root {
+  --red:#C8102E; --red2:#e00035; --bg:#F3F4F7; --card:#fff; --border:rgba(20,24,40,.11);
+  --text:#111827; --muted:#5A5D72; --muted2:#777B90;
+  --shadow:0 4px 14px rgba(17,24,39,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;font-size:15px;line-height:1.45}
+.header{background:#fff;border-bottom:1px solid var(--border);padding:16px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{background:var(--red);color:#fff;font-weight:800;letter-spacing:.08em;padding:5px 10px;border-radius:4px;font-size:11px}
+h1{font-size:20px;margin:0 0 2px;font-weight:800;letter-spacing:-.02em}
+.sub{font-size:12px;color:var(--muted);font-family:Arial,sans-serif}
+
+.tabs{background:#fff;display:flex;gap:6px;border-bottom:1px solid var(--border);padding:0 18px;position:sticky;top:62px;z-index:25;box-shadow:0 1px 4px rgba(0,0,0,.04);overflow-x:auto}
+.tab{padding:15px 20px 13px;cursor:pointer;font-weight:800;color:#606277;border-bottom:4px solid transparent;font-size:15px;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:Arial,sans-serif}
+.tab:hover{color:#30374f}
+.tab.act{color:var(--red2);border-bottom-color:var(--red2)}
+
+.main{padding:22px 20px 60px;max-width:1100px;margin:0 auto}
+
+.search-wrap{margin-bottom:22px}
+.search-input{
+  width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:10px;
+  font-size:15px;font-family:Arial,sans-serif;background:#fff;box-shadow:var(--shadow);
+  color:var(--text);
+}
+.search-input:focus{outline:2px solid var(--red2);outline-offset:-1px}
+
+.sec-label{display:flex;align-items:center;gap:10px;color:#30374f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin:26px 0 12px}
+.sec-label:after{content:"";height:1px;background:var(--border);flex:1}
+.year-group:first-of-type .sec-label{margin-top:0}
+
+.report-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.report-card{
+  background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);
+  padding:16px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text);transition:.12s;text-align:center;
+}
+.report-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(17,24,39,.12);border-color:rgba(200,16,46,.35)}
+.report-card:hover .report-date{color:var(--red2)}
+.report-icon{font-size:20px;line-height:1}
+.report-date{font-weight:800;font-size:15px;color:var(--text)}
+
+.empty-msg{padding:30px;text-align:center;color:var(--muted);font-size:14px;display:none}
+
+.footer-note{color:var(--muted);font-size:12px;margin-top:30px;text-align:center}
+
+@media(max-width:600px){
+  .main{padding:16px 14px 40px}
+  .tab{padding:12px 14px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="logo">LRK</div>
+    <div>
+      <h1>Lėšų pritraukimas | Ataskaitos</h1>
+      <div class="sub">Visos ataskaitos vienoje vietoje</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" id="tabsBar"></div>
+
+<div class="main">
+
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchBox" placeholder="Ieškoti ataskaitos (pvz. data arba mėnuo)..." oninput="filterReports()">
+  </div>
+
+  <div id="reportsContainer"></div>
+  <div class="empty-msg" id="emptyMsg">Nerasta ataskaitų pagal paieškos žodį.</div>
+
+  <div class="footer-note">Lietuvos Raudonasis Kryžius · Duomenų valdymo skyrius</div>
+
+</div>
+
+<script>
+/* ============================================================
+   REPORTS REGISTRY
+   Add a new entry here every time a new dashboard file is
+   uploaded to this GitHub directory.
+   - file: exact filename in this directory (include subfolder if used,
+            e.g. "f2f/lrk_dashboard_v8.html")
+   - label: date shown to the user (YYYY-MM-DD recommended for correct sorting)
+   - section: which tab this report belongs to (see SECTIONS below)
+   ============================================================ */
+const SECTIONS = [
+  { key: "f2f",          label: "F2F" },
+  { key: "verslo-parama",label: "Verslo parama" }
+];
+
+const REPORTS = [
+  // { file: "f2f/lrk_f2f_dashboard_06.23.html",            label: "2026-06-23", section: "f2f" },
+  // { file: "verslo-parama/lrk_verslo_dashboard_06.html",   label: "2026-06",    section: "verslo-parama" },
+];
+
+let activeSection = SECTIONS[0].key;
+
+function renderTabs() {
+  const bar = document.getElementById('tabsBar');
+  bar.innerHTML = SECTIONS.map(s =>
+    `<button class="tab ${s.key === activeSection ? 'act' : ''}" onclick="switchSection('${s.key}')">${s.label}</button>`
+  ).join('');
+}
+
+function switchSection(key) {
+  activeSection = key;
+  renderTabs();
+  document.getElementById('searchBox').value = '';
+  renderReports('');
+}
+
+function groupByYear(reports) {
+  const groups = {};
+  reports.forEach(r => {
+    const year = (r.label.match(/^\d{4}/) || ["Kiti"])[0];
+    if (!groups[year]) groups[year] = [];
+    groups[year].push(r);
+  });
+  return groups;
+}
+
+function renderReports(filterText) {
+  const container = document.getElementById('reportsContainer');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const term = (filterText || '').trim().toLowerCase();
+
+  let filtered = REPORTS.filter(r => r.section === activeSection);
+  if (term) {
+    filtered = filtered.filter(r =>
+      r.label.toLowerCase().includes(term) || r.file.toLowerCase().includes(term)
+    );
+  }
+
+  // newest first
+  filtered.sort((a, b) => b.label.localeCompare(a.label));
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    emptyMsg.style.display = 'block';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+
+  const groups = groupByYear(filtered);
+  const years = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+
+  let html = '';
+  years.forEach(year => {
+    html += `<div class="year-group">
+      <div class="sec-label">${year}</div>
+      <div class="report-grid">`;
+    groups[year].forEach(r => {
+      html += `
+        <a class="report-card" href="${r.file}">
+          <div class="report-icon">📊</div>
+          <div class="report-date">${r.label}</div>
+        </a>`;
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function filterReports() {
+  renderReports(document.getElementById('searchBox').value);
+}
+
+renderTabs();
+renderReports('');
+</script>
+
+</body>
+</html>

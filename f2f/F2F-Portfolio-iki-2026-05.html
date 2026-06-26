@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LRK · FA Portfelio ataskaita</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-light: #E74C3C;
+    --red-pale: #FDECEA;
+    --green: #1A7A4A;
+    --green-light: #27AE60;
+    --green-pale: #E9F7EF;
+    --orange: #D35400;
+    --orange-pale: #FEF0E7;
+    --blue: #1F618D;
+    --blue-pale: #EAF2FB;
+    --purple: #8E44AD;
+    --yellow: #B7950B;
+    --yellow-pale: #FEF9E7;
+    --bg: #F5F4F1;
+    --surface: #FFFFFF;
+    --surface2: #F9F8F6;
+    --border: #E2DDD6;
+    --border2: #EDE9E3;
+    --text: #1C1A17;
+    --text2: #3A3530;
+    --muted: #7A736A;
+    --muted2: #A89F96;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04);
+    --ff: 'Source Sans 3', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--ff); background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.5; }
+
+  /* HEADER */
+  .header {
+    background: var(--red); color: #fff;
+    padding: 0 32px; display: flex; align-items: center;
+    justify-content: space-between; height: 58px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .rk-cross { width: 34px; height: 34px; background: white; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .rk-cross svg { width: 24px; height: 24px; }
+  .header-title { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.01em; }
+  .header-sub { font-size: 0.84rem; opacity: 0.75; font-weight: 400; margin-top: 1px; }
+  .header-date { font-size: 0.84rem; opacity: 0.7; font-weight: 400; }
+
+  /* TABS */
+  .tabs-bar { background: var(--bg); border-bottom: 2px solid var(--border); padding: 12px 32px 0; display: flex; gap: 0; }
+  .tab-btn {
+    padding: 13px 22px; font-size: 0.84rem; font-weight: 700; color: var(--text2);
+    cursor: pointer; border: 1px solid var(--border); border-bottom: none;
+    background: var(--surface2); margin-bottom: -1px; margin-right: 4px;
+    transition: all 0.15s; letter-spacing: 0.05em; text-transform: uppercase;
+    font-family: var(--ff); border-radius: 6px 6px 0 0;
+  }
+  .tab-btn:hover { background: var(--surface); color: var(--red); }
+  .tab-btn.active { color: var(--red); background: var(--surface); border-color: var(--border); border-bottom-color: var(--surface); font-weight: 800; box-shadow: 0 -2px 0 var(--red); }
+
+  /* LAYOUT */
+  .content { padding: 28px 32px 56px; max-width: 1320px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; box-shadow: var(--shadow); }
+  .card-title { font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text2); font-weight: 700; margin-bottom: 18px; }
+
+  /* KPI */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+  .kpi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .kpi-card.g::before { background: var(--green-light); }
+  .kpi-card.r::before { background: var(--red); }
+  .kpi-card.b::before { background: var(--blue); }
+  .kpi-card.o::before { background: var(--orange); }
+  .kpi-card.p::before { background: var(--purple); }
+  .kpi-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; font-weight: 600; }
+  .kpi-val { font-size: 2.1rem; font-weight: 800; line-height: 1.1; margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+  .kpi-val.g { color: var(--green-light); }
+  .kpi-val.r { color: var(--red); }
+  .kpi-val.b { color: var(--blue); }
+  .kpi-val.o { color: var(--orange); }
+  .kpi-val.p { color: var(--purple); }
+  .kpi-sub { font-size: 0.84rem; color: var(--muted); }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.84rem; font-weight: 700; margin-top: 5px; }
+  .badge.down { background: var(--red-pale); color: var(--red); }
+  .badge.up { background: var(--green-pale); color: var(--green); }
+  .badge.warn { background: var(--yellow-pale); color: var(--yellow); }
+
+  /* GRIDS */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .g-38 { display: grid; grid-template-columns: 38fr 62fr; gap: 20px; margin-bottom: 20px; }
+  .g-45 { display: grid; grid-template-columns: 45fr 55fr; gap: 20px; margin-bottom: 20px; }
+
+  /* DONUT */
+  .donut-wrap { display: flex; align-items: center; gap: 22px; }
+  .legend-list { flex: 1; }
+  .leg-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border2); }
+  .leg-row:last-child { border-bottom: none; }
+  .leg-left { display: flex; align-items: center; gap: 9px; }
+  .leg-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .leg-name { font-size: 0.88rem; color: var(--text2); }
+  .leg-right { display: flex; align-items: center; gap: 10px; }
+  .leg-num { font-size: 0.95rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .leg-pct { font-size: 0.84rem; color: var(--text2); font-weight: 600; min-width: 38px; text-align: right; }
+
+  /* BARS */
+  .bar-list { display: flex; flex-direction: column; gap: 11px; }
+  .bar-row { }
+  .bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .bar-name { font-size: 0.88rem; color: var(--text2); font-weight: 500; }
+  .bar-val { font-size: 0.88rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bar-track { height: 10px; background: var(--border2); border-radius: 5px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  .bar-sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* ACTION TAGS */
+  .atag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; margin-left: 6px; }
+  .atag-wait { background: var(--yellow-pale); color: var(--yellow); }
+  .atag-cc { background: var(--orange-pale); color: var(--orange); }
+  .atag-tgt { background: var(--blue-pale); color: var(--blue); }
+  .atag-close { background: var(--red-pale); color: var(--red); }
+
+  /* TABLE */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .tbl thead th { position: sticky; top: 0; background: var(--surface2); padding: 9px 12px; text-align: right; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 2px solid var(--border); white-space: nowrap; }
+  .tbl thead th:first-child { text-align: left; }
+  .tbl tbody tr { border-bottom: 1px solid var(--border2); }
+  .tbl tbody tr:hover { background: var(--surface2); }
+  .tbl tbody td { padding: 7px 12px; text-align: right; font-variant-numeric: tabular-nums; }
+  .tbl tbody td:first-child { text-align: left; font-weight: 500; color: var(--text2); }
+  .tbl tfoot td { padding: 9px 12px; text-align: right; font-weight: 800; border-top: 2px solid var(--border); font-variant-numeric: tabular-nums; background: var(--surface2); }
+  .tbl tfoot td:first-child { text-align: left; }
+  .tbl-wrap { overflow-y: auto; max-height: 320px; }
+  .ng { color: var(--green-light); font-weight: 700; }
+  .nr { color: var(--red); font-weight: 700; }
+  .nb { color: var(--blue); font-weight: 700; }
+  .no { color: var(--orange); font-weight: 700; }
+  .nm { color: var(--muted); }
+
+  /* INSIGHT */
+  .insight { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 6px; padding: 12px 16px; font-size: 0.84rem; color: var(--text2); line-height: 1.65; margin-top: 16px; }
+  .insight strong { color: var(--text); }
+
+  /* SVG CHART */
+  .chart-wrap svg { width: 100%; display: block; }
+  .chart-labels { display: flex; justify-content: space-between; padding: 3px 0 0; }
+  .chart-label { font-size: 0.82rem; color: var(--muted2); }
+
+  /* CHANNEL CARDS */
+  .ch-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-top: 4px; }
+  .ch-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; text-align: center; }
+  .ch-name { font-size: 0.8rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; font-weight: 700; }
+  .ch-val { font-size: 1.4rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+  .ch-pct { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .ch-avg { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+  .ch-bar { height: 3px; border-radius: 2px; margin-top: 8px; }
+
+  /* 2026 BAR CHART */
+  .bar-chart-wrap { position: relative; }
+  .monthly-bars { display: flex; align-items: flex-end; gap: 12px; height: 140px; padding: 0 4px; }
+  .m-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .m-bar { width: 100%; border-radius: 4px 4px 0 0; transition: opacity 0.2s; }
+  .m-bar:hover { opacity: 0.85; }
+  .m-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
+  .m-val { font-size: 0.8rem; color: var(--text2); font-weight: 700; }
+
+  /* STACKED COHORT */
+  .cohort-row { display: grid; grid-template-columns: 50px 1fr 56px; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .cohort-yr { font-size: 0.88rem; font-weight: 700; color: var(--text2); }
+  .cohort-bar { height: 26px; display: flex; border-radius: 4px; overflow: hidden; }
+  .cohort-n { font-size: 0.84rem; color: var(--muted); text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="rk-cross">
+      <svg viewBox="0 0 24 24"><rect x="9" y="0" width="6" height="24" fill="#C0392B"/><rect x="0" y="9" width="24" height="6" fill="#C0392B"/></svg>
+    </div>
+    <div>
+      <div class="header-title">Lietuvos Raudonasis Kryžius</div>
+      <div class="header-sub">FA · Fizinių asmenų rėmėjų portfelio ataskaita</div>
+    </div>
+  </div>
+  <div class="header-date">Duomenys: 2026-05 · SF Closed Won</div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('apzvalga',this)">Apžvalga</button>
+  <button class="tab-btn" onclick="showTab('remejkai',this)">Rėmėjai</button>
+  <button class="tab-btn" onclick="showTab('imokos',this)">Įmokos</button>
+  <button class="tab-btn" onclick="showTab('y2026',this)">2026 detaliau</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════ APŽVALGA ═══════════════════════════ -->
+<div id="tab-apzvalga" class="tab-panel active">
+
+
+
+  <div class="kpi-row">
+    <div class="kpi-card g">
+      <div class="kpi-label">Aktyvūs rėmėjai</div>
+      <div class="kpi-val g">13 711</div>
+      <div class="kpi-sub">Moka reguliariai (nemoka &lt;3 mėn.)</div>
+    </div>
+    <div class="kpi-card r">
+      <div class="kpi-label">Neaktyvūs</div>
+      <div class="kpi-val r">16 063</div>
+      <div class="kpi-sub">Nemoka 3+ mėn. arba nutraukė</div>
+      <div class="badge down">53.9% portfelio</div>
+    </div>
+    <div class="kpi-card b">
+      <div class="kpi-label">Viso portfelyje</div>
+      <div class="kpi-val b">29 774</div>
+      <div class="kpi-sub">Be „niekada nesumokėjo"</div>
+    </div>
+    <div class="kpi-card o">
+      <div class="kpi-label">Vid. įmoka (aktyvūs)</div>
+      <div class="kpi-val o">9,84 €</div>
+      <div class="kpi-sub">Mažėja nuo 2018 (10,77 €)</div>
+      <div class="badge down">−8.7% nuo piko</div>
+    </div>
+  </div>
+  <!-- 1. SRAUTAI - visas plotis -->
+  <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Metinės įmokų sumos ir rėmėjų srautai · 2018–2025</div>
+      <div style="margin-bottom:10px;display:flex;gap:20px;font-size:0.82rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:3px;background:#1F618D;border-radius:2px;display:inline-block;"></span>Įmokų suma</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:3px;background:#27AE60;border-radius:2px;display:inline-block;border-top:2px dashed #27AE60;"></span>Nauji rėmėjai</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:3px;background:#C0392B;border-radius:2px;display:inline-block;border-top:2px dashed #C0392B;"></span>Prarasti rėmėjai</span>
+      </div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 710 175" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="srGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1F618D" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#1F618D" stop-opacity="0.01"/>
+            </linearGradient>
+          </defs>
+          <!-- Axes -->
+          <line x1="50" y1="20" x2="50" y2="155" stroke="#E2DDD6" stroke-width="1"/>
+          <line x1="50" y1="155" x2="665" y2="155" stroke="#E2DDD6" stroke-width="1"/>
+          <line x1="50" y1="84.6" x2="665" y2="84.6" stroke="#E8E4DE" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <!-- Crossover 2024 -->
+          <line x1="564.3" y1="28" x2="564.3" y2="155" stroke="#C0392B" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+          <text x="567" y="45" fill="#C0392B" font-size="8" font-family="Source Sans 3">2024: Prarasti &gt; Nauji</text>
+          <!-- Area fill -->
+          <polygon points="50,155 50.0,148.6 135.7,126.7 221.4,103.9 307.1,83.7 392.9,55.7 478.6,27.0 564.3,20.0 650.0,30.1 650,155" fill="url(#srGrad)"/>
+          <!-- Įmokos line -->
+          <polyline points="50.0,148.6 135.7,126.7 221.4,103.9 307.1,83.7 392.9,55.7 478.6,27.0 564.3,20.0 650.0,30.1"
+            fill="none" stroke="#1F618D" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Nauji line -->
+          <polyline points="50.0,132.1 135.7,77.5 221.4,73.3 307.1,67.3 392.9,36.6 478.6,20.0 564.3,112.4 650.0,124.7"
+            fill="none" stroke="#27AE60" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6,3"/>
+          <!-- Prarasti line -->
+          <polyline points="50.0,148.7 135.7,133.9 221.4,125.4 307.1,119.4 392.9,105.0 478.6,81.6 564.3,93.3 650.0,96.6"
+            fill="none" stroke="#C0392B" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6,3"/>
+          <!-- Key dots -->
+          <circle cx="478.6" cy="20.0" r="5" fill="#27AE60" stroke="white" stroke-width="2"/>
+          <text x="430" y="16" fill="#27AE60" font-size="8.5" font-family="Source Sans 3" font-weight="700">Nauji pikas 2023</text>
+          <circle cx="564.3" cy="20.0" r="5" fill="#1F618D" stroke="white" stroke-width="2"/>
+          <text x="534" y="34" fill="#1F618D" font-size="8" font-family="Source Sans 3" font-weight="700">Įmokos pikas 2024</text>
+          <!-- Y labels -->
+          <text x="44" y="24" fill="#A89F96" font-size="8" text-anchor="end" font-family="Source Sans 3">1.73M€</text>
+          <text x="44" y="88" fill="#A89F96" font-size="8" text-anchor="end" font-family="Source Sans 3">870k€</text>
+          <text x="44" y="158" fill="#A89F96" font-size="8" text-anchor="end" font-family="Source Sans 3">0</text>
+          <!-- X labels -->
+          <text x="50" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2018</text>
+          <text x="135.7" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2019</text>
+          <text x="221.4" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2020</text>
+          <text x="307.1" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2021</text>
+          <text x="392.9" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2022</text>
+          <text x="478.6" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2023</text>
+          <text x="564.3" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2024</text>
+          <text x="650.0" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2025</text>
+        </svg>
+      </div>
+    </div>
+
+  <!-- 2. CHURN LINE - visas plotis -->
+  <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Churn rate · mėnesinis · 2019–2025</div>
+      <div style="margin-bottom:10px;display:flex;gap:20px;font-size:0.82rem;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:3px;background:#C0392B;border-radius:2px;display:inline-block;"></span>Mėnesinis churn %</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:#1F618D;display:inline-block;"></span>Ketvirčio vidurkis</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:2px;background:#27AE60;border-radius:2px;display:inline-block;border-top:2px dashed #27AE60;"></span>2% orientyras</span>
+      </div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 710 175" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="chGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C0392B" stop-opacity="0.07"/>
+              <stop offset="100%" stop-color="#C0392B" stop-opacity="0.01"/>
+            </linearGradient>
+          </defs>
+          <!-- Axes -->
+          <line x1="50" y1="20" x2="50" y2="158" stroke="#E2DDD6" stroke-width="1"/>
+          <line x1="50" y1="158" x2="665" y2="158" stroke="#E2DDD6" stroke-width="1"/>
+          <!-- Year dividers -->
+          <line x1="137.8" y1="20" x2="137.8" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="93" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2019</text>
+          <line x1="225.6" y1="20" x2="225.6" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="182" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2020</text>
+          <line x1="313.4" y1="20" x2="313.4" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="270" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2021</text>
+          <line x1="401.2" y1="20" x2="401.2" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="357" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2022</text>
+          <line x1="481.7" y1="20" x2="481.7" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="441" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2023</text>
+          <line x1="569.5" y1="20" x2="569.5" y2="158" stroke="#E8E4DE" stroke-width="0.5"/>
+          <text x="526" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2024</text>
+          <text x="610" y="168" fill="#A89F96" font-size="8" text-anchor="middle" font-family="Source Sans 3">2025</text>
+          <!-- 2% reference -->
+          <line x1="50" y1="117.9" x2="665" y2="117.9" stroke="#27AE60" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.6"/>
+          <text x="668" y="121" fill="#27AE60" font-size="8" font-family="Source Sans 3" font-weight="600">2%</text>
+          <!-- 3% grid line -->
+          <line x1="50" y1="99.3" x2="665" y2="99.3" stroke="#E8E4DE" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <text x="44" y="102" fill="#A89F96" font-size="7.5" text-anchor="end" font-family="Source Sans 3">3%</text>
+          <!-- Area fill -->
+          <polygon points="50,155 50.0,42.5 57.3,80.5 64.6,75.0 72.0,106.5 79.3,96.1 86.6,93.2 93.9,110.8 101.2,101.7 108.5,101.0 115.9,101.7 123.2,121.8 130.5,106.5 137.8,111.7 145.1,104.9 152.4,106.5 159.8,120.3 167.1,125.1 174.4,124.4 181.7,120.6 189.0,104.5 196.3,107.5 203.7,106.7 211.0,115.6 218.3,123.6 225.6,120.6 232.9,128.6 240.2,114.7 247.6,130.7 254.9,131.4 262.2,124.2 269.5,119.3 276.8,107.8 284.1,108.8 291.5,117.1 298.8,120.1 306.1,122.7 313.4,122.3 320.7,129.2 328.0,113.2 335.4,126.6 342.7,124.5 350.0,122.7 357.3,123.1 364.6,117.5 372.0,113.0 379.3,115.8 386.6,113.8 393.9,113.6 401.2,95.2 408.5,91.7 415.9,118.8 423.2,113.4 430.5,120.1 437.8,117.1 445.1,111.4 452.4,111.7 459.8,114.0 467.1,126.0 474.4,123.1 481.7,123.8 489.0,124.4 496.3,124.4 503.7,124.9 511.0,114.5 518.3,126.8 525.6,110.4 532.9,128.8 540.2,121.2 547.6,126.6 554.9,127.1 562.2,125.3 569.5,123.1 576.8,127.0 584.1,127.5 591.5,131.0 598.8,129.2 606.1,126.0 613.4,120.1 620.7,119.2 628.0,121.8 635.4,123.6 642.7,117.1 650.0,103.9 650,155" fill="url(#chGrad2)"/>
+          <!-- Monthly line -->
+          <polyline points="50.0,42.5 57.3,80.5 64.6,75.0 72.0,106.5 79.3,96.1 86.6,93.2 93.9,110.8 101.2,101.7 108.5,101.0 115.9,101.7 123.2,121.8 130.5,106.5 137.8,111.7 145.1,104.9 152.4,106.5 159.8,120.3 167.1,125.1 174.4,124.4 181.7,120.6 189.0,104.5 196.3,107.5 203.7,106.7 211.0,115.6 218.3,123.6 225.6,120.6 232.9,128.6 240.2,114.7 247.6,130.7 254.9,131.4 262.2,124.2 269.5,119.3 276.8,107.8 284.1,108.8 291.5,117.1 298.8,120.1 306.1,122.7 313.4,122.3 320.7,129.2 328.0,113.2 335.4,126.6 342.7,124.5 350.0,122.7 357.3,123.1 364.6,117.5 372.0,113.0 379.3,115.8 386.6,113.8 393.9,113.6 401.2,95.2 408.5,91.7 415.9,118.8 423.2,113.4 430.5,120.1 437.8,117.1 445.1,111.4 452.4,111.7 459.8,114.0 467.1,126.0 474.4,123.1 481.7,123.8 489.0,124.4 496.3,124.4 503.7,124.9 511.0,114.5 518.3,126.8 525.6,110.4 532.9,128.8 540.2,121.2 547.6,126.6 554.9,127.1 562.2,125.3 569.5,123.1 576.8,127.0 584.1,127.5 591.5,131.0 598.8,129.2 606.1,126.0 613.4,120.1 620.7,119.2 628.0,121.8 635.4,123.6 642.7,117.1 650.0,103.9"
+            fill="none" stroke="#C0392B" stroke-width="1.3" stroke-linejoin="round" opacity="0.75"/>
+          <!-- Quarterly avg dots (selected key ones with labels) -->
+          <circle cx="57.3" cy="66.0" r="4" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <text x="57.3" y="58" fill="#1F618D" font-size="7.5" text-anchor="middle" font-family="Source Sans 3" font-weight="700">4.79%</text>
+          <circle cx="101.2" cy="104.5" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="145.1" cy="107.6" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="167.1" cy="123.2" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="189.0" cy="110.8" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="211.0" cy="115.3" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="232.9" cy="121.4" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="254.9" cy="128.8" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="276.8" cy="111.9" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="298.8" cy="119.9" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="320.7" cy="121.6" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="342.7" cy="124.5" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="364.6" cy="117.9" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="386.6" cy="114.3" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="408.5" cy="93.3" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <text x="408.5" y="86" fill="#1F618D" font-size="7.5" text-anchor="middle" font-family="Source Sans 3" font-weight="700">3.32%</text>
+          <circle cx="423.2" cy="117.5" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="445.1" cy="113.4" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="467.1" cy="121.0" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="489.0" cy="124.2" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="511.0" cy="122.1" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="532.9" cy="120.1" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="554.9" cy="126.4" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="576.8" cy="125.8" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="598.8" cy="128.8" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="620.7" cy="120.3" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <circle cx="642.7" cy="114.9" r="3.5" fill="#1F618D" stroke="white" stroke-width="1.5"/>
+          <text x="642.7" y="107" fill="#C0392B" font-size="7.5" text-anchor="middle" font-family="Source Sans 3" font-weight="700">2.16%</text>
+          <!-- Y labels -->
+          <text x="44" y="29" fill="#A89F96" font-size="7.5" text-anchor="end" font-family="Source Sans 3">7%</text>
+          <text x="44" y="159" fill="#A89F96" font-size="7.5" text-anchor="end" font-family="Source Sans 3">0%</text>
+        </svg>
+      </div>
+      <div class="insight" style="margin-top:10px;">
+        <strong>2019:</strong> aukštas startinis churn (4.79%/ketv.) — portfelis dar jaunas. <strong>2020–2025:</strong> stabilizavosi žemiau 2% orientyro daugumai ketvirčių. <strong>2023 Q1: 3.32%</strong> — anomalija (IT klaida vasarį). <strong>2025 Q4: 2.16%</strong> — šiek tiek virš orientyro, stebėti.
+      </div>
+    </div>
+
+  <!-- 3. PORTFELIO + VID IMOKA - 50/50 -->
+  <div class="g2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title">Portfelio struktūra</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+        <svg width="170" height="170" viewBox="0 0 170 170">
+          <circle cx="85" cy="85" r="62" fill="none" stroke="#E8E4DE" stroke-width="24"/>
+          <circle cx="85" cy="85" r="62" fill="none" stroke="#27AE60" stroke-width="24"
+            stroke-dasharray="179.4 210.1" stroke-dashoffset="389.6" transform="rotate(-90 85 85)"/>
+          <circle cx="85" cy="85" r="62" fill="none" stroke="#C0392B" stroke-width="24"
+            stroke-dasharray="210.1 179.4" stroke-dashoffset="210.1" transform="rotate(-90 85 85)"/>
+          <text x="85" y="79" text-anchor="middle" fill="#1C1A17" font-family="Source Sans 3,sans-serif" font-size="18" font-weight="800">29 774</text>
+          <text x="85" y="96" text-anchor="middle" fill="#8A837A" font-family="Source Sans 3,sans-serif" font-size="10">iš viso</text>
+        </svg>
+        <div style="display:flex;justify-content:center;gap:28px;width:100%;">
+          <div style="text-align:center;">
+            <div style="display:flex;align-items:center;gap:7px;justify-content:center;margin-bottom:3px;">
+              <div class="leg-dot" style="background:#27AE60"></div>
+              <span class="leg-name">Aktyvūs</span>
+            </div>
+            <div class="leg-num" style="color:#27AE60;font-size:1.3rem;">13 711</div>
+            <div class="leg-pct" style="text-align:center;">46.1%</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="display:flex;align-items:center;gap:7px;justify-content:center;margin-bottom:3px;">
+              <div class="leg-dot" style="background:#C0392B"></div>
+              <span class="leg-name">Neaktyvūs</span>
+            </div>
+            <div class="leg-num" style="color:#C0392B;font-size:1.3rem;">16 063</div>
+            <div class="leg-pct" style="text-align:center;">53.9%</div>
+          </div>
+        </div>
+        <div class="insight" style="width:100%;">
+          Daugiau nei pusė portfelio — neaktyvūs. <strong>Win-back potencialas</strong> — ypač T4–T5 segmentas (ilgai mokėję).
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal metus · € / įmoka</div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 370 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="20" x2="40" y2="155" stroke="#E2DDD6" stroke-width="1"/>
+          <line x1="40" y1="155" x2="340" y2="155" stroke="#E2DDD6" stroke-width="1"/>
+          <line x1="40" y1="71" x2="340" y2="71" stroke="#E8E4DE" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <!-- 10€ reference line -->
+          <line x1="40" y1="99" x2="340" y2="99" stroke="#27AE60" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+          <text x="342" y="102" fill="#27AE60" font-size="7" font-family="Source Sans 3">10 €</text>
+          <!-- Vid imoka line (scaled: 9-11.5 range, 140px) -->
+          <polyline points="40.0,55.9 81.4,58.1 122.9,85.6 164.3,90.0 205.7,99.0 247.1,111.3 288.6,115.2 330.0,118.0"
+            fill="none" stroke="#D35400" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="40" cy="55.9" r="3.5" fill="#D35400" stroke="white" stroke-width="1.5"/>
+          <circle cx="330" cy="118.0" r="3.5" fill="#D35400" stroke="white" stroke-width="1.5"/>
+          <text x="44" y="52" fill="#D35400" font-size="7.5" font-family="Source Sans 3" font-weight="600">10,77 €</text>
+          <text x="295" y="130" fill="#D35400" font-size="7.5" font-family="Source Sans 3" font-weight="600">9,66 €</text>
+          <!-- Y labels -->
+          <text x="36" y="24" fill="#A89F96" font-size="7.5" text-anchor="end">11,5 €</text>
+          <text x="36" y="91" fill="#A89F96" font-size="7.5" text-anchor="end">10,2 €</text>
+          <text x="36" y="158" fill="#A89F96" font-size="7.5" text-anchor="end">9,0 €</text>
+        </svg>
+        <div class="chart-labels">
+          <span class="chart-label">2018</span><span class="chart-label">2020</span><span class="chart-label">2022</span><span class="chart-label">2023</span><span class="chart-label">2024</span><span class="chart-label">2025</span>
+        </div>
+      </div>
+      <div class="insight">
+        Vidutinė įmoka nuosekliai mažėja nuo <strong>10,77 €</strong> (2018) iki <strong>9,66 €</strong> (2025) — iš dalies dėl mažesnių naujų rėmėjų įmokų (<strong>18–25 m. grupė: 6,30 €</strong>) ir NeoPay kanalo augimo (~10 €).
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. MERGED TABLE - visas plotis -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">Nauji, prarasti ir churn · 2018–2025</div>
+    <table class="tbl">
+      <thead><tr>
+        <th>Metai</th><th>Nauji</th><th>Prarasti</th><th>Balansas</th><th>Įmokos</th><th>Vid. įmoka €</th><th>Churn %/mėn.</th><th>Churn % metinis</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>2018</td><td class="ng">955</td><td class="nr">72</td><td class="ng">+883</td><td>18 240 €</td><td>10,77 €</td><td class="nm">—</td><td class="nm">—</td></tr>
+        <tr><td>2019</td><td class="ng">3 867</td><td class="nr">860</td><td class="ng">+3 007</td><td>309 829 €</td><td>10,73 €</td><td>3.24%</td><td class="nm">38.9%</td></tr>
+        <tr><td>2020</td><td class="ng">4 092</td><td class="nr">1 311</td><td class="ng">+2 781</td><td>613 251 €</td><td>10,24 €</td><td>2.19%</td><td class="nm">26.3%</td></tr>
+        <tr><td>2021</td><td class="ng">4 415</td><td class="nr">1 631</td><td class="ng">+2 784</td><td>881 934 €</td><td>10,16 €</td><td>1.86%</td><td class="nm">22.3%</td></tr>
+        <tr><td>2022</td><td class="ng">6 049</td><td class="nr">2 403</td><td class="ng">+3 646</td><td>1 253 781 €</td><td>10,00 €</td><td>1.91%</td><td class="nm">22.9%</td></tr>
+        <tr><td>2023</td><td class="ng">6 936</td><td class="nr">3 651</td><td class="ng">+3 285</td><td>1 636 679 €</td><td>9,78 €</td><td>2.26%</td><td class="nm">27.1%</td></tr>
+        <tr style="background:var(--red-pale);"><td><strong>2024</strong></td><td class="ng">2 006</td><td class="nr">3 026</td><td class="nr">−1 020</td><td>1 729 141 €</td><td>9,71 €</td><td class="nr"><strong>1.71%</strong></td><td class="nr"><strong>20.5%</strong></td></tr>
+        <tr style="background:var(--red-pale);"><td><strong>2025</strong></td><td class="ng">1 350</td><td class="nr">2 851</td><td class="nr">−1 501</td><td>1 594 143 €</td><td>9,66 €</td><td class="nr"><strong>1.75%</strong></td><td class="nr"><strong>21.0%</strong></td></tr>
+        <tr><td style="color:var(--muted);">2026 (sau–geg)</td><td class="ng">603</td><td class="nr">813*</td><td class="nr">−210</td><td>571 822 €</td><td>9,75 €</td><td class="nm">—**</td><td class="nm">—**</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:0.76rem;color:var(--muted);margin-top:6px;">* Prarasti sau–kov (nemoka 3+ mėn.) · ** 2026 churn dar nebaigtas</div>
+    <div class="insight" style="margin-top:10px;">
+      2024–2025: prarasti > nauji — portfelis mažėja. Churn % mažėja (1.71–1.75%/mėn.) — <strong>problema yra naujo pritraukimo kolapsas</strong> (2024: −81% nuo 2023 piko). Vidutinė įmoka nuosekliai mažėja, bet 2026 šiek tiek pakilo (9,75 €).
+    </div>
+  </div>
+
+</div><!-- /tab-apzvalga -->
+
+<!-- ═══════════════════════════ RĖMĖJAI ═══════════════════════════ -->
+<div id="tab-remejkai" class="tab-panel">
+
+  <div class="kpi-row">
+    <div class="kpi-card g">
+      <div class="kpi-label">Aktyvūs</div>
+      <div class="kpi-val g">13 711</div>
+      <div class="kpi-sub">Iš jų 89.4% moka 25+ mėn.</div>
+    </div>
+    <div class="kpi-card b">
+      <div class="kpi-label">Aktyvūs moterys</div>
+      <div class="kpi-val b">7 116</div>
+      <div class="kpi-sub">51.9% aktyvių</div>
+    </div>
+    <div class="kpi-card p">
+      <div class="kpi-label">Aktyvūs vyrai</div>
+      <div class="kpi-val p">5 180</div>
+      <div class="kpi-sub">37.8% aktyvių</div>
+    </div>
+    <div class="kpi-card o">
+      <div class="kpi-label">Nenurodyta lytis</div>
+      <div class="kpi-val o">1 425</div>
+      <div class="kpi-sub">10.4% aktyvių</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- TRUKMĖ DONUT -->
+    <div class="card">
+      <div class="card-title">Aktyvūs rėmėjai pagal rėmimo trukmę</div>
+      <div class="donut-wrap">
+        <svg width="150" height="150" viewBox="0 0 150 150" style="flex-shrink:0;">
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#E8E4DE" stroke-width="20"/>
+          <!-- T1 4.7% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#F4D03F" stroke-width="20"
+            stroke-dasharray="15.5 311.2" stroke-dashoffset="326.7" transform="rotate(-90 75 75)"/>
+          <!-- T2 2.5% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#E67E22" stroke-width="20"
+            stroke-dasharray="8.1 318.6" stroke-dashoffset="311.2" transform="rotate(-90 75 75)"/>
+          <!-- T3 3.7% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#8E44AD" stroke-width="20"
+            stroke-dasharray="12.1 314.6" stroke-dashoffset="303.1" transform="rotate(-90 75 75)"/>
+          <!-- T4 43.4% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#27AE60" stroke-width="20"
+            stroke-dasharray="141.8 184.9" stroke-dashoffset="291.1" transform="rotate(-90 75 75)"/>
+          <!-- T5 46.0% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#1F618D" stroke-width="20"
+            stroke-dasharray="150.3 176.4" stroke-dashoffset="149.3" transform="rotate(-90 75 75)"/>
+          <text x="75" y="70" text-anchor="middle" fill="#1C1A17" font-family="Source Sans 3,sans-serif" font-size="15" font-weight="800">13 711</text>
+          <text x="75" y="84" text-anchor="middle" fill="#8A837A" font-family="Source Sans 3,sans-serif" font-size="8.5">aktyvūs</text>
+        </svg>
+        <div class="legend-list">
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#F4D03F"></div><span class="leg-name">T1 · 1–6 mėn.</span></div><div class="leg-right"><span class="leg-num" style="color:#B7950B">650</span><span class="leg-pct">4.7%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#E67E22"></div><span class="leg-name">T2 · 7–12 mėn.</span></div><div class="leg-right"><span class="leg-num" style="color:#E67E22">339</span><span class="leg-pct">2.5%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#8E44AD"></div><span class="leg-name">T3 · 13–24 mėn.</span></div><div class="leg-right"><span class="leg-num" style="color:#8E44AD">507</span><span class="leg-pct">3.7%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#27AE60"></div><span class="leg-name">T4 · 25–48 mėn.</span></div><div class="leg-right"><span class="leg-num" style="color:#27AE60">5 949</span><span class="leg-pct">43.4%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#1F618D"></div><span class="leg-name">T5 · 49+ mėn.</span></div><div class="leg-right"><span class="leg-num" style="color:#1F618D">6 309</span><span class="leg-pct">46.0%</span></div></div>
+          <div class="insight" style="margin-top:10px;"><strong>89.4%</strong> aktyvių moka 25+ mėn. — išskirtinai lojalus branduolys. Naujo augimo kritinis trūkumas: T1+T2 — tik <strong>7.2%</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANKAI DONUT -->
+    <div class="card">
+      <div class="card-title">Aktyvūs rėmėjai pagal mokėjimo kanalą</div>
+      <div class="donut-wrap">
+        <svg width="150" height="150" viewBox="0 0 150 150" style="flex-shrink:0;">
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#E8E4DE" stroke-width="20"/>
+          <!-- Swedbank 53.8% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#1F618D" stroke-width="20"
+            stroke-dasharray="175.7 151.0" stroke-dashoffset="326.7" transform="rotate(-90 75 75)"/>
+          <!-- SEB 26.3% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#2980B9" stroke-width="20"
+            stroke-dasharray="86.0 240.7" stroke-dashoffset="151.0" transform="rotate(-90 75 75)"/>
+          <!-- Luminor 10.0% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#D35400" stroke-width="20"
+            stroke-dasharray="32.5 294.2" stroke-dashoffset="65.0" transform="rotate(-90 75 75)"/>
+          <!-- Neopay 8.4% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#27AE60" stroke-width="20"
+            stroke-dasharray="27.6 299.1" stroke-dashoffset="32.5" transform="rotate(-90 75 75)"/>
+          <!-- Cardinity 2.7% -->
+          <circle cx="75" cy="75" r="52" fill="none" stroke="#B7950B" stroke-width="20"
+            stroke-dasharray="8.8 317.9" stroke-dashoffset="4.9" transform="rotate(-90 75 75)"/>
+          <text x="75" y="70" text-anchor="middle" fill="#1C1A17" font-family="Source Sans 3,sans-serif" font-size="15" font-weight="800">13 711</text>
+          <text x="75" y="84" text-anchor="middle" fill="#8A837A" font-family="Source Sans 3,sans-serif" font-size="8.5">aktyvūs</text>
+        </svg>
+        <div class="legend-list">
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#1F618D"></div><span class="leg-name">Swedbank</span></div><div class="leg-right"><span class="leg-num" style="color:#1F618D">7 373</span><span class="leg-pct">53.8%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#2980B9"></div><span class="leg-name">SEB</span></div><div class="leg-right"><span class="leg-num" style="color:#2980B9">3 610</span><span class="leg-pct">26.3%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#D35400"></div><span class="leg-name">Luminor</span></div><div class="leg-right"><span class="leg-num" style="color:#D35400">1 366</span><span class="leg-pct">10.0%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#27AE60"></div><span class="leg-name">NeoPay</span></div><div class="leg-right"><span class="leg-num" style="color:#27AE60">1 158</span><span class="leg-pct">8.4%</span></div></div>
+          <div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:#B7950B"></div><span class="leg-name">Cardinity</span></div><div class="leg-right"><span class="leg-num" style="color:#B7950B">370</span><span class="leg-pct">2.7%</span></div></div>
+          <div class="insight" style="margin-top:10px;"><strong>90.1%</strong> aktyvių rėmėjų moka per tradicinę e-sąskaitą (Swedbank + SEB + Luminor). Cardinity turi aukščiausią vidutinę įmoką: <strong>12,96 €</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMŽIUS × LYTIS + VIDUTINĖ ĮMOKA -->
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Aktyvūs rėmėjai pagal amžiaus grupę ir lytį</div>
+      <div style="margin-bottom:14px;display:flex;gap:16px;font-size:0.8rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#D35400;display:inline-block;"></span>Moteris</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#1F618D;display:inline-block;"></span>Vyras</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#C8C0B8;display:inline-block;"></span>Nenurodyta</span>
+      </div>
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">18–25</span><span class="bar-val">1 373 <span style="color:var(--muted);font-weight:400;font-size:0.84rem;">(10.0%)</span></span></div>
+          <div style="display:flex;gap:2px;height:11px;border-radius:5px;overflow:hidden;"><div style="width:45.8%;background:#D35400;"></div><div style="width:48.0%;background:#1F618D;"></div><div style="width:6.2%;background:#C8C0B8;"></div></div>
+          <div style="display:flex;gap:12px;margin-top:3px;font-size:0.8rem;"><span style="color:#D35400;">629</span><span style="color:#1F618D;">659</span><span style="color:#8A837A;">85</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">26–35</span><span class="bar-val">4 294 <span style="color:var(--muted);font-weight:400;font-size:0.84rem;">(31.3%)</span></span></div>
+          <div style="display:flex;gap:2px;height:11px;border-radius:5px;overflow:hidden;"><div style="width:51.0%;background:#D35400;"></div><div style="width:47.5%;background:#1F618D;"></div><div style="width:1.4%;background:#C8C0B8;"></div></div>
+          <div style="display:flex;gap:12px;margin-top:3px;font-size:0.8rem;"><span style="color:#D35400;">2 191</span><span style="color:#1F618D;">2 042</span><span style="color:#8A837A;">61</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">36–50</span><span class="bar-val">5 498 <span style="color:var(--muted);font-weight:400;font-size:0.84rem;">(40.1%)</span></span></div>
+          <div style="display:flex;gap:2px;height:11px;border-radius:5px;overflow:hidden;"><div style="width:60.8%;background:#D35400;"></div><div style="width:38.3%;background:#1F618D;"></div><div style="width:0.9%;background:#C8C0B8;"></div></div>
+          <div style="display:flex;gap:12px;margin-top:3px;font-size:0.8rem;"><span style="color:#D35400;">3 342</span><span style="color:#1F618D;">2 106</span><span style="color:#8A837A;">51</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">50+</span><span class="bar-val">1 387 <span style="color:var(--muted);font-weight:400;font-size:0.84rem;">(10.1%)</span></span></div>
+          <div style="display:flex;gap:2px;height:11px;border-radius:5px;overflow:hidden;"><div style="width:68.9%;background:#D35400;"></div><div style="width:28.7%;background:#1F618D;"></div><div style="width:2.5%;background:#C8C0B8;"></div></div>
+          <div style="display:flex;gap:12px;margin-top:3px;font-size:0.8rem;"><span style="color:#D35400;">955</span><span style="color:#1F618D;">398</span><span style="color:#8A837A;">34</span></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name" style="color:var(--muted);">Nenurodyta</span><span class="bar-val" style="color:var(--muted);">1 206 <span style="font-weight:400;font-size:0.84rem;">(8.8%)</span></span></div>
+          <div style="display:flex;gap:2px;height:11px;border-radius:5px;overflow:hidden;"><div style="width:0.8%;background:#D35400;"></div><div style="width:0.2%;background:#1F618D;"></div><div style="width:99.0%;background:#C8C0B8;"></div></div>
+          <div style="display:flex;gap:12px;margin-top:3px;font-size:0.8rem;"><span style="color:#D35400;">10</span><span style="color:#1F618D;">2</span><span style="color:#8A837A;">1 194</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal amžiaus grupę · € / įmoka (aktyvūs)</div>
+      <div class="bar-list" style="margin-top:8px;">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">Cardinity</span><span class="bar-val" style="color:#B7950B;">12,96 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:99.7%;background:#B7950B;"></div></div>
+          <div class="bar-sub">Aukščiausia vid. įmoka — mažiausias kanalas</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">50+ m. (aktyvūs)</span><span class="bar-val" style="color:#1F618D;">11,41 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:87.8%;background:#1F618D;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">36–50 m. (aktyvūs)</span><span class="bar-val" style="color:#1F618D;">10,72 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:82.5%;background:#1F618D;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">SEB</span><span class="bar-val" style="color:#2980B9;">9,96 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76.6%;background:#2980B9;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">NeoPay / Swedbank</span><span class="bar-val" style="color:#27AE60;">~9,80 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75.4%;background:#27AE60;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">26–35 m. (aktyvūs)</span><span class="bar-val" style="color:#D35400;">8,87 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:68.2%;background:#D35400;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">18–25 m. (aktyvūs)</span><span class="bar-val" style="color:#C0392B;">6,30 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:48.5%;background:#C0392B;"></div></div>
+          <div class="bar-sub">Jauniausi rėmėjai moka mažiausiai</div>
+        </div>
+      </div>
+      <div class="insight">
+        Brandžiausi rėmėjai moka daugiausiai. Augant rėmėjų stažui, įmokos auga — <strong>retencija = finansinis augimas</strong>. 36–50 m. grupė: geriausias dydis + įmoka = svarbiausia kohorta.
+      </div>
+    </div>
+  </div>
+
+  <!-- NEAKTYVŪS PAGAL TRUKMĘ -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">Neaktyvūs rėmėjai pagal paskutinę rėmimo trukmę · win-back potencialas</div>
+    <div class="g2" style="margin-bottom:0;">
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T1 · 1–6 mėn. <span class="atag atag-tgt">WIN-BACK</span></span><span class="bar-val">6 418</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:#27AE60;"></div></div>
+          <div class="bar-sub">Dar nepajutę lojalumo — bet neseniai bandė</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T2 · 7–12 mėn. <span class="atag atag-tgt">WIN-BACK</span></span><span class="bar-val">2 427</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:37.8%;background:#27AE60;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T3 · 13–24 mėn. <span class="atag atag-cc">CC TIKSLINĖ</span></span><span class="bar-val">3 259</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:50.8%;background:#E67E22;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T4 · 25–48 mėn. <span class="atag atag-cc">CC PRIORITETAS</span></span><span class="bar-val">3 043</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:47.4%;background:#D35400;"></div></div>
+          <div class="bar-sub">Žinojo organizaciją — aukšta win-back tikimybė</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T5 · 49+ mėn. <span class="atag atag-cc">CC PRIORITETAS</span></span><span class="bar-val">1 165</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:18.1%;background:#C0392B;"></div></div>
+          <div class="bar-sub">Ilgametiai — didžiausias finansinis potencialas</div>
+        </div>
+      </div>
+      <div>
+        <div class="insight">
+          <strong>Win-back prioritetai:</strong><br><br>
+          🥇 <strong>T4–T5 neaktyvūs</strong> (4 208): Mokėjo 25+ mėn. — gerai pažįsta LRK. Aukščiausia atkūrimo tikimybė ir finansinė vertė.<br><br>
+          🥈 <strong>T1–T2 neaktyvūs</strong> (8 845): Bandė, bet neįsitvirtino — gali reikėti papildomos komunikacijos apie LRK misiją.<br><br>
+          🥉 <strong>T3 neaktyvūs</strong> (3 259): Vidutinė trukmė — tikslinga segmentuoti pagal nutraukimo priežastį.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- KOHORTŲ GRAFIKAS -->
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title">Rėmėjai pagal prisijungimo metus ir dabartinį statusą</div>
+    <div style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:14px;font-size:0.8rem;">
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#27AE60;display:inline-block;"></span>Aktyvus</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#F4D03F;display:inline-block;"></span>Nemoka 1 mėn.</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#E67E22;display:inline-block;"></span>Nemoka 2–3 mėn.</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#8E44AD;display:inline-block;"></span>Nemoka 4–6 mėn.</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#1F618D;display:inline-block;"></span>Nemoka 7–12 mėn.</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#C0392B;display:inline-block;"></span>Nemoka 12+ mėn.</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span style="width:13px;height:13px;border-radius:3px;background:#BDC3C7;display:inline-block;"></span>Nutraukė</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2018</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:13.9%;">
+          <div style="width:29.7%;background:#27AE60;" title="Aktyvus: 296"></div>
+          <div style="width:2.9%;background:#F4D03F;" title="Nem.1: 29"></div>
+          <div style="width:1.9%;background:#E67E22;" title="Nem.2-3: 19"></div>
+          <div style="width:0.5%;background:#8E44AD;" title="Nem.4-6: 5"></div>
+          <div style="width:1.2%;background:#1F618D;" title="Nem.7-12: 12"></div>
+          <div style="width:14.7%;background:#C0392B;" title="Nem.12+: 147"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 490"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">998</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2019</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:55.7%;">
+          <div style="width:35.0%;background:#27AE60;" title="Aktyvus: 1399"></div>
+          <div style="width:2.8%;background:#F4D03F;" title="Nem.1: 112"></div>
+          <div style="width:2.6%;background:#E67E22;" title="Nem.2-3: 102"></div>
+          <div style="width:0.4%;background:#8E44AD;" title="Nem.4-6: 15"></div>
+          <div style="width:0.7%;background:#1F618D;" title="Nem.7-12: 28"></div>
+          <div style="width:13.4%;background:#C0392B;" title="Nem.12+: 535"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 1809"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">3 994</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2020</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:56.7%;">
+          <div style="width:35.6%;background:#27AE60;" title="Aktyvus: 1448"></div>
+          <div style="width:1.7%;background:#F4D03F;" title="Nem.1: 68"></div>
+          <div style="width:1.1%;background:#E67E22;" title="Nem.2-3: 45"></div>
+          <div style="width:0.3%;background:#8E44AD;" title="Nem.4-6: 14"></div>
+          <div style="width:0.9%;background:#1F618D;" title="Nem.7-12: 35"></div>
+          <div style="width:16.0%;background:#C0392B;" title="Nem.12+: 649"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 1821"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">4 068</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2021</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:62.3%;">
+          <div style="width:41.0%;background:#27AE60;" title="Aktyvus: 1831"></div>
+          <div style="width:1.3%;background:#F4D03F;" title="Nem.1: 56"></div>
+          <div style="width:0.9%;background:#E67E22;" title="Nem.2-3: 38"></div>
+          <div style="width:0.6%;background:#8E44AD;" title="Nem.4-6: 28"></div>
+          <div style="width:1.1%;background:#1F618D;" title="Nem.7-12: 48"></div>
+          <div style="width:9.5%;background:#C0392B;" title="Nem.12+: 425"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 2059"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">4 467</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2022</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:84.8%;">
+          <div style="width:42.5%;background:#27AE60;" title="Aktyvus: 2582"></div>
+          <div style="width:1.7%;background:#F4D03F;" title="Nem.1: 104"></div>
+          <div style="width:0.8%;background:#E67E22;" title="Nem.2-3: 50"></div>
+          <div style="width:0.7%;background:#8E44AD;" title="Nem.4-6: 43"></div>
+          <div style="width:1.1%;background:#1F618D;" title="Nem.7-12: 64"></div>
+          <div style="width:7.2%;background:#C0392B;" title="Nem.12+: 436"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 2812"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">6 078</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2023</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:100%;">
+          <div style="width:48.1%;background:#27AE60;" title="Aktyvus: 3450"></div>
+          <div style="width:2.1%;background:#F4D03F;" title="Nem.1: 148"></div>
+          <div style="width:0.7%;background:#E67E22;" title="Nem.2-3: 48"></div>
+          <div style="width:0.9%;background:#8E44AD;" title="Nem.4-6: 65"></div>
+          <div style="width:1.6%;background:#1F618D;" title="Nem.7-12: 112"></div>
+          <div style="width:6.0%;background:#C0392B;" title="Nem.12+: 430"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 2977"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">7 171</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2024</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:30.1%;">
+          <div style="width:42.8%;background:#27AE60;" title="Aktyvus: 923"></div>
+          <div style="width:3.4%;background:#F4D03F;" title="Nem.1: 73"></div>
+          <div style="width:2.3%;background:#E67E22;" title="Nem.2-3: 49"></div>
+          <div style="width:4.1%;background:#8E44AD;" title="Nem.4-6: 89"></div>
+          <div style="width:5.5%;background:#1F618D;" title="Nem.7-12: 119"></div>
+          <div style="width:10.7%;background:#C0392B;" title="Nem.12+: 231"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 682"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">2 158</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2025</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:21.3%;">
+          <div style="width:34.7%;background:#27AE60;" title="Aktyvus: 532"></div>
+          <div style="width:16.3%;background:#F4D03F;" title="Nem.1: 249"></div>
+          <div style="width:8.9%;background:#E67E22;" title="Nem.2-3: 136"></div>
+          <div style="width:12.5%;background:#8E44AD;" title="Nem.4-6: 191"></div>
+          <div style="width:21.6%;background:#1F618D;" title="Nem.7-12: 330"></div>
+          <div style="width:6.0%;background:#C0392B;" title="Nem.12+: 92"></div>
+          <div style="flex:1;background:#BDC3C7;" title="Nutraukė: 13"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">1 531</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:12px;">
+        <span style="font-size:0.9rem;font-weight:700;color:var(--text2);">2026</span>
+        <div style="height:26px;display:flex;border-radius:4px;overflow:hidden;width:8.4%;">
+          <div style="width:71%;background:#27AE60;" title="Aktyvus: ~428"></div>
+          <div style="width:12%;background:#F4D03F;" title="Nem.1: ~72"></div>
+          <div style="width:9%;background:#E67E22;" title="Nem.2-3: ~54"></div>
+          <div style="width:5%;background:#8E44AD;" title="Nem.4-6: ~30"></div>
+          <div style="width:3%;background:#1F618D;" title="Nem.7-12: ~19"></div>
+        </div>
+        <span style="font-size:0.8rem;color:var(--muted);text-align:right;">603*</span>
+      </div>
+
+    </div>
+    <div class="insight" style="margin-top:16px;">
+      <strong>2023 kohorta — didžiausia</strong> (7 171 rėmėjų): 48% dar aktyvūs, tik 41.5% nutraukė — geriausias retencijos rodiklis iš visų kohortų.<br>
+      <strong>2025 kohorta — dar per anksti vertinti</strong>: 34.7% aktyvūs, bet 21.6% nemoka jau 7–12 mėn. — aukštas ankstyvojo churn signalas. Stebėti.<br>
+      <strong>2026 kohorta</strong>: 603 nauji (saus–geg), ~71% dar aktyvūs. Per anksti galutinai vertinti — stebėti toliau.<br><strong>2024 kohorta</strong>: tik 923 aktyvūs iš 2 158 — žymiai mažesnė nei ankstesniais metais.
+    </div>
+  </div>
+
+</div><!-- /tab-remejkai -->
+
+<!-- ═══════════════════════════ ĮMOKOS ═══════════════════════════ -->
+<div id="tab-imokos" class="tab-panel">
+
+  <div class="kpi-row">
+    <div class="kpi-card b">
+      <div class="kpi-label">Viso įmokų 2018–2025</div>
+      <div class="kpi-val b">8,61 M €</div>
+      <div class="kpi-sub">Iš aktyvių: 6,22 M € (72.2%)</div>
+    </div>
+    <div class="kpi-card g">
+      <div class="kpi-label">Rekordiniai metai</div>
+      <div class="kpi-val g">1,73 M €</div>
+      <div class="kpi-sub">2024 m. · augimas +5.6% nuo 2023</div>
+    </div>
+    <div class="kpi-card r">
+      <div class="kpi-label">2025 m.</div>
+      <div class="kpi-val r">1,59 M €</div>
+      <div class="kpi-sub">−7.8% nuo 2024 rekordinių</div>
+      <div class="badge down">Mažėja</div>
+    </div>
+    <div class="kpi-card o">
+      <div class="kpi-label">2026 (saus–geg)</div>
+      <div class="kpi-val o">572 k €</div>
+      <div class="kpi-sub">~124 k€/mėn. vidurkis</div>
+    </div>
+  </div>
+
+  <!-- METINĖS ĮMOKOS + PROJEKCIJA -->
+    <div class="g2" style="margin-bottom:20px;">
+
+    <!-- METINĖS ĮMOKŲ SUMOS BAR CHART -->
+    <div class="card">
+      <div class="card-title">Metinės įmokų sumos · 2018–2026</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:180px;padding:4px 4px 0;margin-top:8px;">
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#A89F96;margin-bottom:3px;">18k</div>
+          <div style="width:100%;height:2px;background:#BDC3C7;border-radius:2px 2px 0 0;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2018</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">310k</div>
+          <div style="width:100%;height:30px;background:#1F618D;border-radius:2px 2px 0 0;opacity:0.45;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2019</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">613k</div>
+          <div style="width:100%;height:60px;background:#1F618D;border-radius:2px 2px 0 0;opacity:0.55;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2020</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">882k</div>
+          <div style="width:100%;height:88px;background:#1F618D;border-radius:2px 2px 0 0;opacity:0.65;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2021</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">1,25M</div>
+          <div style="width:100%;height:125px;background:#1F618D;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2022</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">1,64M</div>
+          <div style="width:100%;height:164px;background:#1F618D;border-radius:2px 2px 0 0;opacity:0.88;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2023</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#1F618D;margin-bottom:3px;">1,73M</div>
+          <div style="width:100%;height:173px;background:#1F618D;border-radius:2px 2px 0 0;position:relative;display:flex;align-items:flex-end;justify-content:center;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;padding-bottom:5px;letter-spacing:0.04em;">PIKAS</span>
+          </div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2024</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#C0392B;margin-bottom:3px;">1,59M</div>
+          <div style="width:100%;height:159px;background:#C0392B;border-radius:2px 2px 0 0;opacity:0.75;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2025</div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.68rem;font-weight:700;color:#C0392B;margin-bottom:3px;">~1,50M</div>
+          <div style="width:100%;height:150px;background:#C0392B;border-radius:2px 2px 0 0;opacity:0.4;border:2px dashed #C0392B;box-sizing:border-box;"></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:600;">2026*</div>
+        </div>
+
+      </div>
+      <div style="height:1px;background:var(--border2);margin:6px 0 8px;"></div>
+      <div class="insight">
+        Pikas — 2024 m. (1,73 M€). 2025: −7.8%. <strong>2026 prognozė ~1,50 M€</strong> — pagal vas–geg vidurkį (124,9 k€/mėn.) × 12. Be sausio IT klaidos.
+      </div>
+    </div>
+
+    <!-- NAUJI VS PRARASTI BAR CHART -->
+    <div class="card">
+      <div class="card-title">Nauji vs prarasti rėmėjai · 2019–2025</div>
+      <div style="margin-bottom:8px;display:flex;gap:14px;font-size:0.8rem;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#27AE60;display:inline-block;"></span>Nauji</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#C0392B;display:inline-block;"></span>Prarasti</span>
+      </div>
+
+      <!-- Barai su skaičiais viduje -->
+      <div style="display:flex;align-items:flex-end;gap:5px;height:160px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:56px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">3 867</span>
+          </div>
+          <div style="width:72%;height:12px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">860</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2019</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:59px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">4 092</span>
+          </div>
+          <div style="width:72%;height:19px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">1 311</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2020</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:64px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">4 415</span>
+          </div>
+          <div style="width:72%;height:24px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">1 631</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2021</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:87px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">6 049</span>
+          </div>
+          <div style="width:72%;height:35px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">2 403</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2022</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:100px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">6 936</span>
+          </div>
+          <div style="width:72%;height:53px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">3 651</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2023</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:29px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">2 006</span>
+          </div>
+          <div style="width:72%;height:44px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">3 026</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2024</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="width:72%;height:19px;background:#27AE60;border-radius:3px 3px 0 0;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+            <span style="color:white;font-size:0.62rem;font-weight:700;white-space:nowrap;">1 350</span>
+          </div>
+          <div style="width:72%;height:41px;background:#C0392B;border-radius:0 0 3px 3px;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;">
+            <span style="color:white;font-size:0.6rem;font-weight:600;white-space:nowrap;">2 851</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;font-weight:600;">2025</div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:var(--border2);margin:8px 0;"></div>
+      <div class="insight">
+        2024–2025: prarasti > nauji — portfelis mažėja. <strong>Problema: naujo pritraukimo kolapsas</strong> (2024: −81% nuo 2023 piko 6 936). Churn % stabilus — reikia auginti naujus.
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- MĖNESINĖS SUMOS HEATMAP-STYLE TABLE -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">Mėnesinės įmokų sumos · € · 2018–2026</div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr>
+          <th>Mėn.</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2018</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2019</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2020</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2021</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2022</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2023</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2024</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2025</th><th style="font-size:0.88rem;color:var(--text);font-weight:800;">2026</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Sausis</td><td class="nm">—</td><td>13 046</td><td>39 924</td><td>63 169</td><td>89 144</td><td>118 890</td><td>149 811</td><td>137 657</td><td class="ng">72 156</td></tr>
+          <tr><td>Vasaris</td><td class="nm">—</td><td>15 070</td><td>41 372</td><td>62 034</td><td>91 205</td><td>58 677</td><td>147 251</td><td>135 276</td><td class="ng">124 079</td></tr>
+          <tr><td>Kovas</td><td class="nm">—</td><td>17 987</td><td>45 006</td><td>61 169</td><td>96 537</td><td>140 195</td><td>147 752</td><td>135 663</td><td class="ng">126 157</td></tr>
+          <tr><td>Balandis</td><td class="nm">—</td><td>19 146</td><td>43 615</td><td>60 196</td><td>97 099</td><td>135 194</td><td>147 648</td><td>135 418</td><td class="ng">123 892</td></tr>
+          <tr><td>Gegužė</td><td class="nm">—</td><td>22 466</td><td>43 847</td><td>63 927</td><td>99 864</td><td>141 766</td><td>141 424</td><td>135 827</td><td class="ng">125 326</td></tr>
+          <tr><td>Birželis</td><td class="nm">—</td><td>24 192</td><td>44 084</td><td>70 497</td><td>103 272</td><td>145 244</td><td>143 411</td><td>132 272</td><td class="nm">212</td></tr>
+          <tr><td>Liepa</td><td class="nm">—</td><td>27 599</td><td>49 448</td><td>77 650</td><td>105 905</td><td>150 415</td><td>143 951</td><td>133 748</td><td class="nm">—</td></tr>
+          <tr><td>Rugpjūtis</td><td class="nm">—</td><td>30 321</td><td>56 537</td><td>80 125</td><td>108 545</td><td>149 460</td><td>142 868</td><td>132 759</td><td class="nm">—</td></tr>
+          <tr><td>Rugsėjis</td><td>320</td><td>32 524</td><td>59 189</td><td>83 628</td><td>111 945</td><td>153 100</td><td>142 804</td><td>129 512</td><td class="nm">—</td></tr>
+          <tr><td>Spalis</td><td>2 237</td><td>33 665</td><td>62 285</td><td>85 053</td><td>114 548</td><td>147 174</td><td>141 586</td><td>128 800</td><td class="nm">—</td></tr>
+          <tr><td>Lapkritis</td><td>6 214</td><td>35 870</td><td>64 082</td><td>86 288</td><td>117 043</td><td>146 902</td><td>140 771</td><td>130 091</td><td class="nm">—</td></tr>
+          <tr><td>Gruodis</td><td>9 469</td><td>37 943</td><td>63 862</td><td>88 198</td><td>118 674</td><td>149 662</td><td>139 864</td><td>127 120</td><td class="nm">—</td></tr>
+        </tbody>
+        <tfoot><tr>
+          <td>IŠ VISO</td><td>18 240</td><td>309 829</td><td>613 251</td><td>881 934</td><td>1 253 781</td><td>1 636 679</td><td>1 729 141</td><td>1 594 143</td><td>571 822</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="insight" style="margin-top:12px;">
+      <strong>2023-02 ir 2026-01 anomalijos:</strong> 58 677 € ir 72 156 € (vs. ~130–150 k€ įprastai) — abiem atvejais tai buvo <strong>IT partnerio techninė klaida</strong>: nebuvo suformuoti pareikalavimai bankams nuskaityti įmokas. <strong>Įmokos buvo prarastos</strong> — kitą mėnesį pareikalauta tik už naują mėnesį (praleisto mėnesio įmoka nebegaunama). Rėmėjai neprarasti. <strong>2026-06: 212 €</strong> — birželis dar tik prasidėjęs.
+    </div>
+  </div>
+
+
+  <!-- VID ĮMOKA PJŪVIAI -->
+  <div class="g2" style="margin-top:20px;">
+
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal rėmimo trukmę · aktyvūs</div>
+      <div class="bar-list" style="margin-top:6px;">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T5 · 49+ mėn.</span><span class="bar-val" style="color:#1F618D;">10,15 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:78.1%;background:#1F618D;"></div></div>
+          <div class="bar-sub">Ilgamečiai moka daugiau — lojalumas ↔ vertė</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T1 · 1–6 mėn.</span><span class="bar-val" style="color:#27AE60;">9,92 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76.3%;background:#27AE60;"></div></div>
+          <div class="bar-sub">Nauji rėmėjai — šiuolaikinės kampanijos (~10 €)</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T4 · 25–48 mėn.</span><span class="bar-val" style="color:#27AE60;">9,32 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:71.7%;background:#27AE60;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T2 · 7–12 mėn.</span><span class="bar-val" style="color:#E67E22;">9,36 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:72.0%;background:#E67E22;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">T3 · 13–24 mėn.</span><span class="bar-val" style="color:#E67E22;">9,02 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:69.4%;background:#E67E22;"></div></div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:12px;">T5 lojalūs (49+ mėn.) moka daugiausiai. Įdomu — T1 nauji taip pat aukšti (~9,92 €), nes naujos kampanijos orientuotos į ~10 € įmoką. Viduriniai segmentai T2–T4 žemesni.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal amžių ir lytį · aktyvūs</div>
+      <div style="margin-bottom:12px;display:flex;gap:14px;font-size:0.82rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:11px;height:11px;border-radius:2px;background:#D35400;display:inline-block;"></span>Moteris</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:11px;height:11px;border-radius:2px;background:#1F618D;display:inline-block;"></span>Vyras</span>
+      </div>
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">50+</span><span class="bar-val" style="color:#1F618D;">11,41 € <span style="font-size:0.78rem;font-weight:400;">(M: 9,38 / V: 12,72)</span></span></div>
+          <div style="display:flex;gap:3px;height:11px;border-radius:5px;overflow:hidden;">
+            <div style="width:45.5%;background:#D35400;" title="Moteris 9,38€"></div>
+            <div style="width:54.5%;background:#1F618D;" title="Vyras 12,72€"></div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">36–50</span><span class="bar-val" style="color:#1F618D;">10,72 € <span style="font-size:0.78rem;font-weight:400;">(M: 11,56 / V: 10,12)</span></span></div>
+          <div style="display:flex;gap:3px;height:11px;border-radius:5px;overflow:hidden;">
+            <div style="width:53.3%;background:#D35400;" title="Moteris 11,56€"></div>
+            <div style="width:46.7%;background:#1F618D;" title="Vyras 10,12€"></div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">26–35</span><span class="bar-val" style="color:#E67E22;">8,87 € <span style="font-size:0.78rem;font-weight:400;">(M: 9,57 / V: 8,29)</span></span></div>
+          <div style="display:flex;gap:3px;height:11px;border-radius:5px;overflow:hidden;">
+            <div style="width:53.6%;background:#D35400;" title="Moteris 9,57€"></div>
+            <div style="width:46.4%;background:#1F618D;" title="Vyras 8,29€"></div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">18–25</span><span class="bar-val" style="color:#C0392B;">6,30 € <span style="font-size:0.78rem;font-weight:400;">(M: 6,08 / V: 6,47)</span></span></div>
+          <div style="display:flex;gap:3px;height:11px;border-radius:5px;overflow:hidden;">
+            <div style="width:48.4%;background:#D35400;" title="Moteris 6,08€"></div>
+            <div style="width:51.6%;background:#1F618D;" title="Vyras 6,47€"></div>
+          </div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:12px;">
+        50+ vyrai moka daugiausiai (12,72 €). <strong>Dvi grupės, kur moterys moka daugiau nei vyrai:</strong> 36–50 (11,56 vs 10,12 €) ir 26–35 (9,57 vs 8,29 €). 18–25 grupė: mažiausia įmoka ir mažiausias lyties skirtumas.
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal mokėjimo kanalą · visi rėmėjai</div>
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">Cardinity</span><span class="bar-val" style="color:#B7950B;">12,96 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:99.7%;background:#B7950B;"></div></div>
+          <div class="bar-sub">Aukščiausia — bet tik 2.7% aktyvių rėmėjų</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">SEB</span><span class="bar-val" style="color:#2980B9;">9,96 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76.6%;background:#2980B9;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">NeoPay</span><span class="bar-val" style="color:#27AE60;">9,90 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76.2%;background:#27AE60;"></div></div>
+          <div class="bar-sub">Naujas kanalas (2025+), vid. ~10 €</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">Swedbank</span><span class="bar-val" style="color:#1F618D;">9,80 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75.4%;background:#1F618D;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">Luminor</span><span class="bar-val" style="color:#D35400;">9,38 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:72.2%;background:#D35400;"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Vidutinė įmoka pagal metus · tendencija</div>
+      <div class="bar-list">
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2018</span><span class="bar-val" style="color:#1F618D;">10,77 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:82.8%;background:#1F618D;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2020</span><span class="bar-val" style="color:#1F618D;">10,24 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:78.8%;background:#1F618D;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2022</span><span class="bar-val" style="color:#E67E22;">10,00 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:76.9%;background:#E67E22;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2023</span><span class="bar-val" style="color:#E67E22;">9,78 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75.2%;background:#E67E22;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2025</span><span class="bar-val" style="color:#C0392B;">9,66 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:74.3%;background:#C0392B;"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-header"><span class="bar-name">2026 (sau–geg)</span><span class="bar-val" style="color:#C0392B;">9,75 €</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75.0%;background:#C0392B;opacity:0.6;"></div></div>
+          <div class="bar-sub">Šiek tiek aukštesnė nei 2025 — stabilizacija</div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:12px;">Nuolatinis mažėjimas nuo 10,77 € (2018) iki 9,66 € (2025) — iš dalies dėl jaunesnių rėmėjų (18–25: 6,30 €) ir naujų kanalų augimo. 2026: 9,75 € — pirmą kartą šiek tiek pakilo.</div>
+    </div>
+  </div>
+
+  <!-- AKTYVŪS ĮMOKŲ SUMA PAGAL BANKĄ -->
+  <div class="card">
+    <div class="card-title">Aktyvių rėmėjų įmokų suma pagal kanalą · 2018–2026</div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr><th>Kanalas</th><th>2019</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026*</th><th>Viso</th></tr></thead>
+        <tbody>
+          <tr><td>Swedbank</td><td>90 220</td><td>194 366</td><td>292 097</td><td>444 312</td><td>652 669</td><td>800 241</td><td>809 502</td><td>287 508</td><td class="nb">3 574 869</td></tr>
+          <tr><td>SEB</td><td>53 774</td><td>116 174</td><td>170 170</td><td>249 382</td><td>365 070</td><td>408 290</td><td>409 142</td><td>165 280</td><td class="nb">1 940 171</td></tr>
+          <tr><td>Luminor</td><td>9 658</td><td>26 141</td><td>45 007</td><td>69 584</td><td>93 958</td><td>119 877</td><td>130 782</td><td>60 987</td><td class="nb">556 514</td></tr>
+          <tr><td>NeoPay</td><td class="nm">—</td><td class="nm">—</td><td class="nm">—</td><td class="nm">—</td><td class="nm">—</td><td class="nm">—</td><td>31 005</td><td>36 353</td><td class="nb">67 358</td></tr>
+          <tr><td>Cardinity</td><td>60</td><td>61</td><td>541</td><td>1 872</td><td>4 583</td><td>20 216</td><td>36 065</td><td>14 227</td><td class="nb">77 630</td></tr>
+        </tbody>
+        <tfoot><tr><td>Viso aktyvūs</td><td>153 712</td><td>336 742</td><td>507 815</td><td>765 150</td><td>1 116 280</td><td>1 348 624</td><td>1 416 496</td><td>564 355</td><td class="nb">6 216 542</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /tab-imokos -->
+
+<!-- ═══════════════════════════ 2026 DETALIAU ═══════════════════════════ -->
+<div id="tab-y2026" class="tab-panel">
+
+  <div class="kpi-row">
+    <div class="kpi-card g">
+      <div class="kpi-label">Nauji 2026 (saus–geg)</div>
+      <div class="kpi-val g">603</div>
+      <div class="kpi-sub">Sausio–gegužės mėn. suma</div>
+    </div>
+    <div class="kpi-card r">
+      <div class="kpi-label">Prarasti 2026*</div>
+      <div class="kpi-val r">1 369</div>
+      <div class="kpi-sub">Pask. mok. ≤ 2026-02 (3+ mėn.)</div>
+      <div class="badge down">2.3× daugiau nei nauji</div>
+    </div>
+    <div class="kpi-card b">
+      <div class="kpi-label">Įmokos (saus–geg)</div>
+      <div class="kpi-val b">571 822 €</div>
+      <div class="kpi-sub">Vidurkis: ~124 k€/mėn.</div>
+    </div>
+    <div class="kpi-card o">
+      <div class="kpi-label">Vid. mėn. įmokos 2026</div>
+      <div class="kpi-val o">124 k€</div>
+      <div class="kpi-sub">Vasaris–gegužė: stabilus lygis</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- 2026 MONTHLY BARS -->
+    <div class="card">
+      <div class="card-title">Mėnesinės įmokų sumos · 2026</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;font-size:0.84rem;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#1F618D;display:inline-block;"></span>Įmokos €</span>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:14px;height:140px;padding:0 8px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.84rem;font-weight:700;color:#1F618D;margin-bottom:3px;">72 156</div>
+          <div style="width:100%;height:66px;background:#1F618D;border-radius:4px 4px 0 0;opacity:0.7;"></div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-top:5px;font-weight:600;">Sau</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.84rem;font-weight:700;color:#1F618D;margin-bottom:3px;">124 079</div>
+          <div style="width:100%;height:114px;background:#1F618D;border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-top:5px;font-weight:600;">Vas</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.84rem;font-weight:700;color:#1F618D;margin-bottom:3px;">126 157</div>
+          <div style="width:100%;height:116px;background:#1F618D;border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-top:5px;font-weight:600;">Kov</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.84rem;font-weight:700;color:#1F618D;margin-bottom:3px;">123 892</div>
+          <div style="width:100%;height:114px;background:#1F618D;border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-top:5px;font-weight:600;">Bal</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:0.84rem;font-weight:700;color:#1F618D;margin-bottom:3px;">125 326</div>
+          <div style="width:100%;height:116px;background:#1F618D;border-radius:4px 4px 0 0;"></div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-top:5px;font-weight:600;">Geg</div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:14px;">
+        Sausis: <strong>72 156 €</strong> — tik ~58% normalios mėnesio sumos. Tai IT partnerio klaida: nebuvo suformuoti pareikalavimai bankams nuskaityti įmokas. <strong>Sausio įmokos prarastos</strong> — kitą mėnesį pareikalauta tik už vasarį. Vasaris–gegužė stabilūs: ~124–126 k€/mėn.
+      </div>
+    </div>
+
+    <!-- 2026 NAUJI VS PRARASTI -->
+    <div class="card">
+      <div class="card-title">Nauji vs prarasti rėmėjai · 2026 mėnesiais</div>
+      <div style="overflow-x:auto;">
+        <table class="tbl">
+          <thead><tr><th>Mėnuo</th><th>Nauji</th><th>Prarasti*</th><th>Pokytis</th><th>Įmokos €</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01</td><td class="ng">86</td><td class="nr">235</td><td class="nr">−149</td><td>72 156</td></tr>
+            <tr><td>2026-02</td><td class="ng">46</td><td class="nr">277</td><td class="nr">−231</td><td>124 079</td></tr>
+            <tr><td>2026-03</td><td class="ng">94</td><td class="nr">301</td><td class="nr">−207</td><td>126 157</td></tr>
+            <tr><td>2026-04</td><td class="ng">128</td><td class="nr">556</td><td class="nr">−428</td><td>123 892</td></tr>
+            <tr><td>2026-05</td><td class="ng">249</td><td class="nm">—*</td><td class="nm">—</td><td>125 326</td></tr>
+          </tbody>
+          <tfoot><tr><td>Viso</td><td class="ng">603</td><td class="nr">1 369</td><td class="nr">−766</td><td class="nb">571 610 €</td></tr></tfoot>
+        </table>
+      </div>
+      <div class="insight" style="margin-top:12px;">
+        <strong>Pastaba dėl „prarastų" vertinimo:</strong> 3+ mėn. nemokantys = galutinai prarasti. Rėmėjai su 1–2 mėn. pertraukomis kartais atnaujina mokėjimus savaime — todėl vertiname tik tuos, kurių paskutinis mokėjimas buvo 3+ mėn. atgal.<br><br>
+        <strong>Gegužės nauji:</strong> 249 — geriausias 2026 m. mėnesinis rezultatas!
+      </div>
+    </div>
+  </div>
+
+  <!-- 2026 COHORT BY YEAR + MONTHLY NEW TREND -->
+      <div class="g2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title">Nauji rėmėjai · 2026 sau–geg · vnt. ir pirmos įmokos €</div>
+      <div style="margin-bottom:10px;display:flex;gap:16px;font-size:0.82rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:#27AE60;display:inline-block;"></span>Skaičius (vnt.)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:#1F618D;display:inline-block;opacity:0.75;"></span>Pirmos įmokos (€)</span>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:10px;height:130px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:3px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:35px;background:#27AE60;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.65rem;font-weight:700;">86</span></div>
+            <div style="flex:1;height:39px;background:#1F618D;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.6rem;font-weight:600;">927 €</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:600;">Sau*</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:3px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:18px;background:#27AE60;border-radius:3px 3px 0 0;display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:0.62rem;font-weight:700;">46</span></div>
+            <div style="flex:1;height:21px;background:#1F618D;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:0.58rem;font-weight:600;">491€</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:600;">Vas</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:3px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:38px;background:#27AE60;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.65rem;font-weight:700;">94</span></div>
+            <div style="flex:1;height:37px;background:#1F618D;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.6rem;font-weight:600;">876 €</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:600;">Kov</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:3px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:51px;background:#27AE60;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.65rem;font-weight:700;">128</span></div>
+            <div style="flex:1;height:50px;background:#1F618D;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;"><span style="color:white;font-size:0.6rem;font-weight:600;">1 166 €</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:600;">Bal</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:3px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:100px;background:#27AE60;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.72rem;font-weight:700;">249</span></div>
+            <div style="flex:1;height:100px;background:#1F618D;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.65rem;font-weight:600;">2 352 €</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:600;">Geg</div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:10px;">Gegužė — geriausias mėnuo: <strong>249 nauji</strong>, pirmos įmokos <strong>2 352 €</strong>. Augimo tendencija nuo kovo. Viso sau–geg pirmos įmokos: <strong>5 812 €</strong>.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Prarasti rėmėjai · 2026 sau–kov · vnt. ir paskutinės įmokos €</div>
+      <div style="margin-bottom:6px;font-size:0.8rem;color:var(--muted);">Paskutinis mokėjimas šį mėn. — nemoka 3+ mėn. nuo dabar</div>
+      <div style="margin-bottom:10px;display:flex;gap:16px;font-size:0.82rem;">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:#C0392B;display:inline-block;"></span>Skaičius (vnt.)</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;border-radius:3px;background:#922B21;display:inline-block;opacity:0.75;"></span>Paskutinės įmokos (€)</span>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:20px;height:130px;padding:0 20px;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:78px;background:#C0392B;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.72rem;font-weight:700;">235</span></div>
+            <div style="flex:1;height:71px;background:#922B21;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.65rem;font-weight:600;">2 307 €</span></div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);font-weight:600;">Sau</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:92px;background:#C0392B;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.72rem;font-weight:700;">277</span></div>
+            <div style="flex:1;height:87px;background:#922B21;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.65rem;font-weight:600;">2 804 €</span></div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);font-weight:600;">Vas</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:110px;">
+            <div style="flex:1;height:100px;background:#C0392B;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.72rem;font-weight:700;">301</span></div>
+            <div style="flex:1;height:100px;background:#922B21;border-radius:3px 3px 0 0;opacity:0.75;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;"><span style="color:white;font-size:0.65rem;font-weight:600;">3 230 €</span></div>
+          </div>
+          <div style="font-size:0.82rem;color:var(--muted);font-weight:600;">Kov</div>
+        </div>
+      </div>
+      <div class="insight" style="margin-top:10px;">Sau–kov prarasti: <strong>813 rėmėjų</strong>, paskutinės įmokos: <strong>8 341 €</strong>. Vid. paskutinė įmoka <strong>10,26 €</strong> — šiek tiek aukštesnė nei vidurkis. Bal–geg bus žinomi liepą.</div>
+    </div>
+
+  </div>
+
+
+<div class="card">
+    <div class="card-title">Nauji rėmėjai pagal mėnesį · palyginimas su 2023 m.</div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead><tr><th>Mėnuo</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>2023→2026 pokytis</th></tr></thead>
+        <tbody>
+          <tr><td>Sausis</td><td>563</td><td>277</td><td>1</td><td class="ng">86</td><td class="nr">−85%</td></tr>
+          <tr><td>Vasaris</td><td>212</td><td>112</td><td>23</td><td class="ng">46</td><td class="nr">−78%</td></tr>
+          <tr><td>Kovas</td><td>1 157</td><td>261</td><td>95</td><td class="ng">94</td><td class="nr">−92%</td></tr>
+          <tr><td>Balandis</td><td>872</td><td>152</td><td>153</td><td class="ng">128</td><td class="nr">−85%</td></tr>
+          <tr><td>Gegužė</td><td>887</td><td>114</td><td>196</td><td class="ng">249</td><td class="nr">−72%</td></tr>
+          <tr><td>Birželis</td><td>783</td><td>217</td><td>178</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Liepa</td><td>819</td><td>246</td><td>240</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Rugpjūtis</td><td>566</td><td>182</td><td>148</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Rugsėjis</td><td>560</td><td>120</td><td>58</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Spalis</td><td>167</td><td>70</td><td>41</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Lapkritis</td><td>41</td><td>127</td><td>60</td><td class="nm">—</td><td class="nm">—</td></tr>
+          <tr><td>Gruodis</td><td>309</td><td>128</td><td>157</td><td class="nm">—</td><td class="nm">—</td></tr>
+        </tbody>
+        <tfoot><tr><td>IŠ VISO</td><td>6 936</td><td>2 006</td><td>1 350</td><td class="ng">603</td><td class="nr">−91%</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="insight" style="margin-top:12px;">
+      Naujų rėmėjų pritraukimas krito <strong>−81%</strong> nuo 2023 piko (6 936) iki 2025 (1 350). <strong>Kritinis signalas:</strong> be naujo augimo portfelis ir toliau mažės, nes esamas branduolys natūraliai mažėja. 2025 sausis (1 rėmėjas) turbūt duomenų artefaktas.
+    </div>
+  </div>
+
+</div><!-- /tab-y2026 -->
+
+</div><!-- /content -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

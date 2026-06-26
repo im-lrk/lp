@@ -33,7 +33,14 @@ h1{font-size:20px;margin:0 0 2px;font-weight:800;letter-spacing:-.02em}
 }
 .search-input:focus{outline:2px solid var(--red2);outline-offset:-1px}
 
-.sec-label{display:flex;align-items:center;gap:10px;color:#30374f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin:26px 0 12px}
+.cat-block{margin-bottom:30px}
+.cat-title{
+  display:flex;align-items:center;gap:10px;color:#111827;font-weight:900;font-size:16px;
+  margin:0 0 14px;padding-bottom:10px;border-bottom:2px solid var(--red2);
+}
+.cat-title .bar{width:5px;height:18px;background:var(--red2);border-radius:2px;flex-shrink:0}
+
+.sec-label{display:flex;align-items:center;gap:10px;color:#30374f;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:12px;margin:18px 0 10px}
 .sec-label:after{content:"";height:1px;background:var(--border);flex:1}
 .year-group:first-of-type .sec-label{margin-top:0}
 
@@ -90,10 +97,13 @@ h1{font-size:20px;margin:0 0 2px;font-weight:800;letter-spacing:-.02em}
    REPORTS REGISTRY
    Add a new entry here every time a new dashboard file is
    uploaded to this GitHub directory.
-   - file: exact filename in this directory (include subfolder if used,
-            e.g. "f2f/lrk_dashboard_v8.html")
-   - label: date shown to the user (YYYY-MM-DD recommended for correct sorting)
-   - section: which tab this report belongs to (see SECTIONS below)
+   - file: exact filename (include subfolder, e.g. "f2f/dashboard.html")
+   - label: date shown to the user (YYYY-MM-DD or YYYY | MM-MM recommended)
+   - section: which tab this belongs to (see SECTIONS below)
+   - category: (optional) sub-zone shown as a header within a tab
+                e.g. "Lokacijų ir facerių efektyvumas" or "Rėmėjų portfelis"
+                Leave it out (or use the same string) for reports that
+                don't need sub-grouping.
    ============================================================ */
 const SECTIONS = [
   { key: "f2f",          label: "F2F" },
@@ -101,8 +111,9 @@ const SECTIONS = [
 ];
 
 const REPORTS = [
-  { file: "f2f/F2F_Lokacijų_Efektyvumas_2026.04-05.html",            label: "2026 | 04-05", section: "f2f" },
-  { file: "verslo-parama/LP_JA_dashboard_Q1-Q2_2026_01-04-(06.10).html",   label: "2026 | 01-04",    section: "verslo-parama" },
+  { file: "verslo-parama/LP_JA_dashboard_Q1-Q2_2026_01-04-(06.10).html", label: "2026 | 01-04", section: "verslo-parama" },
+  { file: "f2f/LP_F2F_lokacijos_dashboard_2026_04-05.html", label: "2026 | 04-05", section: "f2f", category: "Lokacijų ir facerių efektyvumas" },
+  { file: "f2f/LP_F2F_portfelis_dashboard_2026_04-05.html", label: "2026 | 04-05", section: "f2f", category: "Rėmėjų portfelis" }
 ];
 
 let activeSection = SECTIONS[0].key;
@@ -131,31 +142,9 @@ function groupByYear(reports) {
   return groups;
 }
 
-function renderReports(filterText) {
-  const container = document.getElementById('reportsContainer');
-  const emptyMsg = document.getElementById('emptyMsg');
-  const term = (filterText || '').trim().toLowerCase();
-
-  let filtered = REPORTS.filter(r => r.section === activeSection);
-  if (term) {
-    filtered = filtered.filter(r =>
-      r.label.toLowerCase().includes(term) || r.file.toLowerCase().includes(term)
-    );
-  }
-
-  // newest first
-  filtered.sort((a, b) => b.label.localeCompare(a.label));
-
-  if (filtered.length === 0) {
-    container.innerHTML = '';
-    emptyMsg.style.display = 'block';
-    return;
-  }
-  emptyMsg.style.display = 'none';
-
-  const groups = groupByYear(filtered);
+function renderYearGroups(reports) {
+  const groups = groupByYear(reports);
   const years = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-
   let html = '';
   years.forEach(year => {
     html += `<div class="year-group">
@@ -170,6 +159,52 @@ function renderReports(filterText) {
     });
     html += `</div></div>`;
   });
+  return html;
+}
+
+function renderReports(filterText) {
+  const container = document.getElementById('reportsContainer');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const term = (filterText || '').trim().toLowerCase();
+
+  let filtered = REPORTS.filter(r => r.section === activeSection);
+  if (term) {
+    filtered = filtered.filter(r =>
+      r.label.toLowerCase().includes(term) ||
+      r.file.toLowerCase().includes(term) ||
+      (r.category && r.category.toLowerCase().includes(term))
+    );
+  }
+
+  filtered.sort((a, b) => b.label.localeCompare(a.label));
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    emptyMsg.style.display = 'block';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+
+  // Group by category first (if any present), preserving first-seen order
+  const hasCategories = filtered.some(r => r.category);
+
+  let html = '';
+  if (hasCategories) {
+    const cats = [];
+    filtered.forEach(r => {
+      const c = r.category || 'Kita';
+      if (!cats.includes(c)) cats.push(c);
+    });
+    cats.forEach(cat => {
+      const subset = filtered.filter(r => (r.category || 'Kita') === cat);
+      html += `<div class="cat-block">
+        <div class="cat-title"><span class="bar"></span>${cat}</div>
+        ${renderYearGroups(subset)}
+      </div>`;
+    });
+  } else {
+    html = renderYearGroups(filtered);
+  }
 
   container.innerHTML = html;
 }

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoPay vs Iki-NeoPay · Rėmėjų išlaikymo palyginimas</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root {
+  --red: #C0392B; --red-l: #FADBD8; --red-d: #922B21;
+  --navy: #1B2A4A;
+  --green: #1E8449; --green-l: #D5F5E3;
+  --amber: #D4AC0D; --amber-l: #FEF9E7;
+  --blue: #2471A3; --blue-l: #EBF5FB;
+  --purple: #7D3C98; --purple-l: #F4ECF7;
+  --gray05: #F5F6F8; --gray10: #EAECEE; --gray50: #7F8C8D; --gray80: #2C3E50;
+  --font: 'Source Sans 3', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--gray05); color: var(--gray80); }
+
+.header { background: var(--navy); padding: 16px 36px; display: flex; align-items: center; gap: 14px; }
+.rk-logo { width: 36px; height: 36px; background: var(--red); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+.rk-logo svg { width: 20px; height: 20px; }
+.hd-main { font-size: 16px; font-weight: 700; color: white; }
+.hd-sub  { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+.page { padding: 24px 36px 48px; max-width: 1340px; margin: 0 auto; }
+.page-title h1 { font-size: 22px; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
+.page-title h1 span.neo { color: var(--red); }
+.page-title h1 span.old { color: var(--green); }
+.page-title .meta { font-size: 12px; color: var(--gray50); margin-bottom: 20px; }
+
+/* COMPARISON BADGE STRIP */
+.badge-strip { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 22px; }
+.badge-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.badge-vs { background: var(--navy); color: white; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; flex-shrink: 0; margin: 0 auto; }
+
+.kpi { background: white; border-radius: 8px; padding: 13px 15px 11px; box-shadow: 0 1px 3px rgba(0,0,0,.06); border-top: 3px solid var(--gray10); }
+.kpi.neo  { border-top-color: var(--red); }
+.kpi.old  { border-top-color: var(--green); }
+.kpi-lbl  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--gray50); margin-bottom: 4px; }
+.kpi-val  { font-size: 22px; font-weight: 900; line-height: 1; }
+.kpi-val.red   { color: var(--red); }
+.kpi-val.green { color: var(--green); }
+.kpi-val.amber { color: var(--amber); }
+.kpi-sub  { font-size: 10px; color: var(--gray50); margin-top: 3px; }
+
+/* SECTION LABELS */
+.section-lbl {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+  color: white; padding: 6px 14px; border-radius: 4px; margin-bottom: 10px; width: fit-content;
+}
+.section-lbl.neo { background: var(--red); }
+.section-lbl.old { background: var(--green); }
+
+/* CARDS */
+.card { background: white; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,.07); overflow: hidden; }
+.card-head { padding: 11px 16px 10px; border-bottom: 1px solid var(--gray10); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--gray80); }
+.card-sub   { font-size: 11px; color: var(--gray50); }
+.card-body  { padding: 14px 16px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+/* VERDICT BOX */
+.verdict {
+  background: linear-gradient(135deg, #1B2A4A 0%, #2C3E6A 100%);
+  border-radius: 10px; padding: 22px 28px; margin-bottom: 20px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+}
+.verdict-item { border-right: 1px solid rgba(255,255,255,.12); padding-right: 20px; }
+.verdict-item:last-child { border-right: none; }
+.verdict-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.55); margin-bottom: 5px; }
+.verdict-val { font-size: 26px; font-weight: 900; line-height: 1; }
+.verdict-val.red   { color: #E74C3C; }
+.verdict-val.green { color: #2ECC71; }
+.verdict-val.amber { color: #F1C40F; }
+.verdict-sub { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 4px; line-height: 1.45; }
+
+/* YEAR TABLE */
+.yr-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.yr-table th { background: var(--navy); color: white; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .3px; padding: 8px 10px; text-align: center; }
+.yr-table th:first-child { text-align: left; }
+.yr-table td { padding: 7px 10px; text-align: center; border-bottom: 1px solid var(--gray10); }
+.yr-table td:first-child { text-align: left; font-weight: 700; }
+.yr-table tr.neo-row td { background: rgba(192,57,43,.06); }
+.yr-table tr.neo-row td:first-child { color: var(--red); }
+.yr-table tr.total-row td { background: var(--gray05); font-weight: 700; border-top: 2px solid var(--gray10); }
+.bar-cell { position: relative; }
+.inline-bar { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+
+.note-box { background: var(--gray05); border-left: 3px solid var(--gray10); border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 12px; color: var(--gray50); line-height: 1.6; margin-top: 14px; }
+.note-box strong { color: var(--gray80); }
+.footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--gray10); font-size: 11px; color: var(--gray50); display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="rk-logo"><svg viewBox="0 0 22 22" fill="none"><rect x="8" y="1" width="6" height="20" rx="1.5" fill="white"/><rect x="1" y="8" width="20" height="6" rx="1.5" fill="white"/></svg></div>
+  <div>
+    <div class="hd-main">Rėmėjų išlaikymas · iki-NeoPay (2018–2024) vs NeoPay (2025)</div>
+    <div class="hd-sub">LIETUVOS RAUDONASIS KRYŽIUS · FA Skyrius · Palyginamoji analizė</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-title">
+    <h1><span class="old">Iki-NeoPay 2018–2024</span> &nbsp;vs&nbsp; <span class="neo">NeoPay 2025</span></h1>
+    <div class="meta">Kohorta = pirmojo faktinio mokėjimo mėnuo · 2018–2024: N=28 352 · 2025: N=1 200 (tik 2025 m. kohortos)</div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="verdict-item">
+      <div class="verdict-lbl">Vid. mėnesių (2018–2024)</div>
+      <div class="verdict-val green">22,8</div>
+      <div class="verdict-sub">mediana: 19 mėn.<br>M+1 retention: 87%</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-lbl">Vid. mėnesių (2025 NeoPay)</div>
+      <div class="verdict-val red">5,7</div>
+      <div class="verdict-sub">mediana: 5 mėn.<br>M+1 retention: 70%</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-lbl">Skirtumas</div>
+      <div class="verdict-val amber">−75%</div>
+      <div class="verdict-sub">NeoPay rėmėjai remia ~4× trumpiau.<br>M+1 retention žemesnis 17 p.p.</div>
+    </div>
+  </div>
+
+  <!-- KPI COMPARISON -->
+  <div class="badge-strip">
+    <div>
+      <div class="section-lbl old">🟢 Iki-NeoPay 2018–2024</div>
+      <div class="badge-group">
+        <div class="kpi old"><div class="kpi-lbl">Rėmėjų</div><div class="kpi-val green">28 352</div><div class="kpi-sub">su ≥1 mokėjimu</div></div>
+        <div class="kpi old"><div class="kpi-lbl">Vid. mėnesių</div><div class="kpi-val green">22,8</div><div class="kpi-sub">mediana: 19</div></div>
+        <div class="kpi old"><div class="kpi-lbl">Vid. suma</div><div class="kpi-val green">228 €</div><div class="kpi-sub">mediana: 140 €</div></div>
+        <div class="kpi old"><div class="kpi-lbl">Tik 1 mėnuo</div><div class="kpi-val" style="color:var(--green)">6,9%</div><div class="kpi-sub">1 944 rėmėjai</div></div>
+        <div class="kpi old"><div class="kpi-lbl">1–2 mėn.</div><div class="kpi-val" style="color:var(--green)">11,8%</div><div class="kpi-sub">3 349 rėmėjų</div></div>
+        <div class="kpi old"><div class="kpi-lbl">3+ mėnesiai</div><div class="kpi-val green">88,2%</div><div class="kpi-sub">25 003 rėmėjai</div></div>
+      </div>
+    </div>
+    <div class="badge-vs">VS</div>
+    <div>
+      <div class="section-lbl neo">🔴 NeoPay 2025</div>
+      <div class="badge-group">
+        <div class="kpi neo"><div class="kpi-lbl">Rėmėjų</div><div class="kpi-val red">1 200</div><div class="kpi-sub">tik 2025 m. kohortos</div></div>
+        <div class="kpi neo"><div class="kpi-lbl">Vid. mėnesių</div><div class="kpi-val red">5,7</div><div class="kpi-sub">mediana: 5</div></div>
+        <div class="kpi neo"><div class="kpi-lbl">Vid. suma</div><div class="kpi-val red">61 €</div><div class="kpi-sub">mediana: ~50 €</div></div>
+        <div class="kpi neo"><div class="kpi-lbl">Tik 1 mėnuo</div><div class="kpi-val red">21,4%</div><div class="kpi-sub">257 rėmėjų</div></div>
+        <div class="kpi neo"><div class="kpi-lbl">1–2 mėn.</div><div class="kpi-val red">34,6%</div><div class="kpi-sub">415 rėmėjų</div></div>
+        <div class="kpi neo"><div class="kpi-lbl">3+ mėnesiai</div><div class="kpi-val" style="color:var(--amber)">65,4%</div><div class="kpi-sub">785 rėmėjai</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETENTION COMPARISON CHART -->
+  <div class="grid2">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">📈 Retention kreivės · palyginimas</span>
+        <span class="card-sub">% rėmėjų, vis dar mokančių po N mėn.</span>
+      </div>
+      <div class="card-body">
+        <div style="position:relative;height:260px"><canvas id="chart-ret-compare"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">📊 Pasiskirstymas pagal mėnesius</span>
+        <span class="card-sub">% rėmėjų pagal aktyvių mėnesių sk.</span>
+      </div>
+      <div class="card-body">
+        <div style="position:relative;height:260px"><canvas id="chart-dist-compare"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YEAR TABLE + DIST TABLE -->
+  <div class="grid2">
+    <div class="card">
+      <div class="card-head"><span class="card-title">📅 Statistika pagal pirmosios įmokos metus</span></div>
+      <div class="card-body" style="padding:0">
+        <table class="yr-table">
+          <thead><tr><th>Metai</th><th>Rėmėjų sk.</th><th>Vid. mėn.</th><th>Vid. suma €</th><th>Tik 1 mėn.</th><th>3+ mėn.</th></tr></thead>
+          <tbody>
+            <tr><td>2018</td><td>956</td><td style="color:var(--green);font-weight:700">42,2</td><td>468 €</td><td>5,6%</td><td>90,9%</td></tr>
+            <tr><td>2019</td><td>3 870</td><td style="color:var(--green);font-weight:700">38,2</td><td>415 €</td><td>5,8%</td><td>89,6%</td></tr>
+            <tr><td>2020</td><td>4 096</td><td style="color:var(--green);font-weight:700">30,5</td><td>294 €</td><td>6,4%</td><td>88,8%</td></tr>
+            <tr><td>2021</td><td>4 423</td><td style="color:var(--green);font-weight:700">25,6</td><td>248 €</td><td>6,8%</td><td>88,4%</td></tr>
+            <tr><td>2022</td><td>6 060</td><td style="color:var(--amber);font-weight:700">18,9</td><td>176 €</td><td>7,2%</td><td>87,5%</td></tr>
+            <tr><td>2023</td><td>6 926</td><td style="color:var(--amber);font-weight:700">13,8</td><td>136 €</td><td>7,9%</td><td>85,9%</td></tr>
+            <tr><td>2024</td><td>2 021</td><td style="color:var(--amber);font-weight:700">5,3</td><td>46 €</td><td>18,2%</td><td>68,0%</td></tr>
+            <tr class="neo-row"><td>2025 (NeoPay)</td><td>1 200</td><td style="color:var(--red);font-weight:700">5,7</td><td>61 €</td><td>21,4%</td><td>65,4%</td></tr>
+            <tr class="total-row"><td>2018–2024 vid.</td><td>28 352</td><td style="color:var(--green);font-weight:700">22,8</td><td>228 €</td><td>6,9%</td><td>88,2%</td></tr>
+          </tbody>
+        </table>
+        <div class="note-box">
+          <strong>Pastaba dėl 2024:</strong> Vid. mėnesių mažas (5,3) dėl trumpo stebėjimo — 2024 rėmėjai turėjo maks. 12–17 mėn. Panašiai kaip 2025 NeoPay situacija. Tikrasis jų retention paaiškės 2026–2027.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="card-title">📋 Pasiskirstymo palyginimas</span></div>
+      <div class="card-body" style="padding:0">
+        <table class="yr-table">
+          <thead><tr><th>Mėnesių sk.</th><th>Iki-NeoPay %</th><th>NeoPay 2025 %</th><th>Skirtumas</th></tr></thead>
+          <tbody id="dist-compare-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL IMPACT -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <span class="card-title">💶 Finansinis poveikis · skaičiavimas</span>
+      <span class="card-sub">5 rėmėjai, 84 € bendra mėnesinė įmoka · per 12 mėn.</span>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="background:var(--green-l);border-radius:8px;padding:16px 18px;border-left:4px solid var(--green)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--green);margin-bottom:6px">Iki-NeoPay retention lygio</div>
+          <div style="font-size:32px;font-weight:900;color:var(--green)">~780 €</div>
+          <div style="font-size:11px;color:var(--gray50);margin-top:4px">M+1=87%, stabilizuojasi ~65%</div>
+        </div>
+        <div style="background:var(--red-l);border-radius:8px;padding:16px 18px;border-left:4px solid var(--red)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--red);margin-bottom:6px">NeoPay 2025 retention lygio</div>
+          <div style="font-size:32px;font-weight:900;color:var(--red)">~520 €</div>
+          <div style="font-size:11px;color:var(--gray50);margin-top:4px">M+1=70%, stabilizuojasi ~38%</div>
+        </div>
+        <div style="background:var(--amber-l);border-radius:8px;padding:16px 18px;border-left:4px solid var(--amber)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#8A6100;margin-bottom:6px">Prarastos pajamos per 12 mėn.</div>
+          <div style="font-size:32px;font-weight:900;color:var(--amber)">~260 €</div>
+          <div style="font-size:11px;color:var(--gray50);margin-top:4px">iš kiekvienos 5 rėmėjų grupės</div>
+        </div>
+      </div>
+      <div class="note-box" style="margin-top:12px">
+        <strong>Ekstrapoliuojant:</strong> jei NeoPay problema paveikė visus 1 200 rėmėjų — prarastos pajamos siekia apie <strong>~62 400 €</strong> per pirmų 12 mėn. lyginant su iki-NeoPay laikotarpio retention lygiu. Tai argumentas diskusijoje su NeoPay.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span><strong>2018–2024:</strong> N=28 352 · Salesforce Closed Won · iki-NeoPay tarpininkai</span>
+    <span><strong>2025:</strong> N=1 200 · tik 2025 m. kohortos · NeoPay tarpininkas</span>
+    <span><strong>Metodas:</strong> Kohorta = pirmasis faktinis mokėjimas · Svertinis retention vidurkis</span>
+    <span><strong>Parengė:</strong> Sonata · 2026-06-10</span>
+  </div>
+</div>
+
+<script>
+const ff = "'Source Sans 3', sans-serif";
+const gc = 'rgba(0,0,0,.05)';
+const tf = { family:ff, size:11 };
+
+// Retention data
+const retOld = [100,87.0,83.9,80.1,77.4,75.1,72.4,70.5,69.7,68.5,67.5,66.6,65.6];
+const retNeo = [100,70.3,58.6,53.1,46.6,44.9,45.6,42.6,40.2,40.0,38.6,38.5,40.6];
+const retLabels = ['M+0','M+1','M+2','M+3','M+4','M+5','M+6','M+7','M+8','M+9','M+10','M+11','M+12'];
+
+// Chart 1: Retention comparison
+window.addEventListener('load', function(){
+  new Chart(document.getElementById('chart-ret-compare'), {
+    type:'line',
+    data:{ labels:retLabels, datasets:[
+      { label:'Iki-NeoPay 2018–2024', data:retOld,
+        borderColor:'#1E8449', backgroundColor:'rgba(30,132,73,.08)',
+        borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#1E8449', tension:.3, fill:true,
+        datalabels:{display:true,anchor:'end',align:'top',offset:2,font:{family:ff,size:9,weight:'700'},color:'#1E6B37',formatter:v=>v+'%'}
+      },
+      { label:'NeoPay 2025', data:retNeo,
+        borderColor:'#C0392B', backgroundColor:'rgba(192,57,43,.08)',
+        borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#C0392B', tension:.3, fill:true,
+        datalabels:{display:true,anchor:'end',align:'bottom',offset:2,font:{family:ff,size:9,weight:'700'},color:'#922B21',formatter:v=>v+'%'}
+      },
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{padding:{top:24,bottom:8}},
+      plugins:{
+        legend:{display:true,position:'top',labels:{font:{family:ff,size:11},boxWidth:12,padding:12,usePointStyle:true}},
+        datalabels:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}
+      },
+      scales:{
+        x:{grid:{color:gc},ticks:{font:tf}},
+        y:{grid:{color:gc},ticks:{font:tf,callback:v=>v+'%'},min:0,max:115,
+           title:{display:true,text:'Retention %',font:{family:ff,size:10},color:'#666'}}
+      }
+    }
+  });
+
+  // Chart 2: Distribution comparison
+  const distBuckets = ['1','2','3','4','5','6','7','8','9','10','11','12','13+'];
+  const distOld2 = [6.9,5.0,3.9,3.3,3.1,2.8,2.4,2.0,1.9,1.9,1.8,2.2,12.8];
+  const distNeo2 = [21.4,13.2,8.3,5.9,5.2,6.8,5.2,5.4,4.0,5.4,6.9,4.4,7.8];
+
+  new Chart(document.getElementById('chart-dist-compare'), {
+    type:'bar',
+    data:{ labels:distBuckets, datasets:[
+      { label:'Iki-NeoPay 2018–2024', data:distOld2, backgroundColor:'rgba(30,132,73,.72)', borderRadius:3, borderSkipped:false },
+      { label:'NeoPay 2025',          data:distNeo2, backgroundColor:'rgba(192,57,43,.72)', borderRadius:3, borderSkipped:false },
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'top',labels:{font:{family:ff,size:11},boxWidth:12,padding:10,usePointStyle:true}},
+        datalabels:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y}%`}}
+      },
+      scales:{
+        x:{grid:{color:gc},ticks:{font:tf},title:{display:true,text:'Aktyvių mėnesių sk.',font:{family:ff,size:10},color:'#666'}},
+        y:{grid:{color:gc},ticks:{font:tf,callback:v=>v+'%'},title:{display:true,text:'% rėmėjų',font:{family:ff,size:10},color:'#666'}}
+      }
+    }
+  });
+
+  // Distribution compare table
+  const rows = [
+    ['1 mėn.',  '6,9%','21,4%','+14,5 p.p.',true],
+    ['2 mėn.',  '5,0%','13,2%','+8,2 p.p.',true],
+    ['3 mėn.',  '3,9%','8,3%', '+4,4 p.p.',true],
+    ['4 mėn.',  '3,3%','5,9%', '+2,6 p.p.',true],
+    ['5 mėn.',  '3,1%','5,2%', '+2,1 p.p.',true],
+    ['6 mėn.',  '2,8%','6,8%', '+4,0 p.p.',true],
+    ['7–9 mėn.','6,2%','14,6%','+8,4 p.p.',true],
+    ['10–12 mėn.','5,9%','15,7%','+9,8 p.p.',true],
+    ['13+ mėn.','62,9%','14,6%','−48,3 p.p.',false],
+  ];
+  const tbody = document.getElementById('dist-compare-table');
+  tbody.innerHTML = rows.map(([lbl,old,neo,diff,worse])=>`
+    <tr>
+      <td>${lbl}</td>
+      <td style="color:var(--green);font-weight:600">${old}</td>
+      <td style="color:var(--red);font-weight:600">${neo}</td>
+      <td style="color:${worse?'var(--red)':'var(--green)'};font-weight:700">${diff}</td>
+    </tr>`).join('');
+});
+</script>
+</body>
+</html>
